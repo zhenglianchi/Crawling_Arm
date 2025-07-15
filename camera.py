@@ -13,7 +13,7 @@ class Camera:
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
 
-        color_intrin, depth_intrin, img_color, img_depth, aligned_depth_frame = self.get_aligned_images()
+        color_intrin, depth_intrin, img_color, img_depth, aligned_depth_frame, intr_coeffs, intr_matrix = self.get_aligned_images()
 
         self.f = [color_intrin.fx,color_intrin.fy]
         self.resolution = [color_intrin.width,color_intrin.height]

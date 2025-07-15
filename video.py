@@ -4,6 +4,7 @@ import numpy as np
 from PyQt5.QtGui import QImage, QPixmap
 import time
 import cv2
+# pip install opencv-contrib-python==4.5.4.60
 import cv2.aruco as aruco
 
 class VideoThread(QThread):

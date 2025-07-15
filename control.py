@@ -34,7 +34,7 @@ class Control:
         self.open_target_flag = False
         self.open_servo_flag = False
          # 双相机
-        self.cameraA_serial="840412061540"
+        self.cameraA_serial="909512070942"
         self.cameraB_serial="827312072322"
 
         self.open_cameraA_flag=False
@@ -633,6 +633,9 @@ class Control:
             self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
         else:
             self.open_servo_flag = True
             self.addLogs("捕获流程开始")
@@ -699,11 +702,11 @@ class Control:
             elif types == "ReaTwinZ":
                 self.line_z.setText(str(round(value,3)))
             elif types == "ReaTwinRX":
-                self.line_Rr.setText(str(round(value,3)))
+                self.line_Rx.setText(str(round(value,3)))
             elif types == "ReaTwinRY":
-                self.line_Rp.setText(str(round(value,3)))
-            elif types == "ReaTwinRZ":
                 self.line_Ry.setText(str(round(value,3)))
+            elif types == "ReaTwinRZ":
+                self.line_Rz.setText(str(round(value,3)))
         
 
     def update_image(self, image):

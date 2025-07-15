@@ -989,25 +989,18 @@ class Ui_MainWindow(object):
 "margin-top: 0px;")
         self.line_z.setObjectName("line_z")
         self.verticalLayout_20.addWidget(self.line_z)
-        self.line_Rr = QtWidgets.QLineEdit(self.widget_19)
+        self.line_Rx = QtWidgets.QLineEdit(self.widget_19)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.line_Rr.sizePolicy().hasHeightForWidth())
-        self.line_Rr.setSizePolicy(sizePolicy)
-        self.line_Rr.setStyleSheet("background-color: #f9f9f9;\n"
+        sizePolicy.setHeightForWidth(self.line_Rx.sizePolicy().hasHeightForWidth())
+        self.line_Rx.setSizePolicy(sizePolicy)
+        self.line_Rx.setStyleSheet("background-color: #f9f9f9;\n"
 "padding: 5px 10px;\n"
 "border:none;\n"
 "margin-top: 0px;")
-        self.line_Rr.setObjectName("line_Rr")
-        self.verticalLayout_20.addWidget(self.line_Rr)
-        self.line_Rp = QtWidgets.QLineEdit(self.widget_19)
-        self.line_Rp.setStyleSheet("background-color: #f9f9f9;\n"
-"padding: 5px 10px;\n"
-"border:none;\n"
-"margin-top: 0px;")
-        self.line_Rp.setObjectName("line_Rp")
-        self.verticalLayout_20.addWidget(self.line_Rp)
+        self.line_Rx.setObjectName("line_Rx")
+        self.verticalLayout_20.addWidget(self.line_Rx)
         self.line_Ry = QtWidgets.QLineEdit(self.widget_19)
         self.line_Ry.setStyleSheet("background-color: #f9f9f9;\n"
 "padding: 5px 10px;\n"
@@ -1015,6 +1008,13 @@ class Ui_MainWindow(object):
 "margin-top: 0px;")
         self.line_Ry.setObjectName("line_Ry")
         self.verticalLayout_20.addWidget(self.line_Ry)
+        self.line_Rz = QtWidgets.QLineEdit(self.widget_19)
+        self.line_Rz.setStyleSheet("background-color: #f9f9f9;\n"
+"padding: 5px 10px;\n"
+"border:none;\n"
+"margin-top: 0px;")
+        self.line_Rz.setObjectName("line_Rz")
+        self.verticalLayout_20.addWidget(self.line_Rz)
         self.horizontalLayout.addWidget(self.widget_19)
         self.widget_12 = QtWidgets.QWidget(self.widget_4)
         self.widget_12.setStyleSheet("border:none\n"
@@ -1255,9 +1255,9 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "X"))
         self.label_2.setText(_translate("MainWindow", "Y"))
         self.label_3.setText(_translate("MainWindow", "Z"))
-        self.label_4.setText(_translate("MainWindow", "Rr"))
-        self.label_6.setText(_translate("MainWindow", "Rp"))
-        self.label_32.setText(_translate("MainWindow", "Ry"))
+        self.label_4.setText(_translate("MainWindow", "Rx"))
+        self.label_6.setText(_translate("MainWindow", "Ry"))
+        self.label_32.setText(_translate("MainWindow", "Rz"))
         self.label_37.setText(_translate("MainWindow", "Fx"))
         self.label_38.setText(_translate("MainWindow", "Fy"))
         self.label_39.setText(_translate("MainWindow", "Fz"))
