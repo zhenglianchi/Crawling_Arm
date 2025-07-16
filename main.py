@@ -4,6 +4,8 @@ from Ui_System import Ui_MainWindow  #导入你写的界面类
 from PyQt5.QtWidgets import QAbstractItemView
 from PyQt5.QtCore import Qt
 from control import Control
+import faulthandler
+faulthandler.enable()
  
 class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
     def __init__(self,parent =None):
