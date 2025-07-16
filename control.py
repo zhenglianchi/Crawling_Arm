@@ -149,37 +149,10 @@ class Control:
                         self.thread.stop_camera()
 
                 self.thread = VideoThread(serial=self.cameraA_serial)
-                self.thread.change_pixmap_signal.connect(self.check_and_update_image_A)
+                self.thread.change_pixmap_signal.connect(self.update_image)
                 self.thread.start_camera()
             except Exception as e:
                 self.addLogs(str(e))
-                
-    def check_and_update_image_A(self, image):
-        if image is not None and not image.isNull():
-            # 成功获取到图像
-            self.open_cameraA_flag = True
-            self.button_cameraA.setText("关闭A侧相机及六维力")
-            self.button_cameraA.setStyleSheet("""
-                background-color: gray;
-                color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
-            """)
-            self.addLogs("A侧相机和六维力开启")
-            # 正常更新图像
-            self.update_image(image)
-            # 改回正常信号处理
-            self.thread.change_pixmap_signal.disconnect(self.check_and_update_image_A)
-            self.thread.change_pixmap_signal.connect(self.update_image)
-        else:
-            # 没有图像，关闭线程
-            self.addLogs("A侧相机没有图像，保持当前画面")
-            self.thread.stop_camera()
-            self.thread = None
 
     def open_cameraB(self):
         if self.open_cameraB_flag:
@@ -221,37 +194,10 @@ class Control:
                 
 
                 self.thread = VideoThread(serial=self.cameraB_serial)
-                self.thread.change_pixmap_signal.connect(self.check_and_update_image_B)
+                self.thread.change_pixmap_signal.connect(self.update_image)
                 self.thread.start_camera()
             except Exception as e:
                 self.addLogs(str(e))
-    def check_and_update_image_B(self, image):
-        if image is not None and not image.isNull():
-            # 成功获取到图像
-            self.open_cameraB_flag = True
-            self.button_cameraB.setText("关闭B侧相机及六维力")
-            self.button_cameraB.setStyleSheet("""
-                background-color: gray;
-                color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
-            """)
-            self.addLogs("B侧相机和六维力开启")
-            # 正常更新图像
-            self.update_image(image)
-            # 改回正常信号处理
-            self.thread.change_pixmap_signal.disconnect(self.check_and_update_image_B)
-            self.thread.change_pixmap_signal.connect(self.update_image)
-        else:
-            # 没有图像，关闭线程
-            self.addLogs("B侧相机没有图像，保持当前画面")
-            self.thread.stop_camera()
-            self.thread = None
-
 
     def open_motor(self):
         if self.open_motor_flag:
@@ -644,7 +590,6 @@ class Control:
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
             self.servo.update_pose_signal.connect(self.write_delta)
-            self.servo.finished_signal.connect(self.judge)
             self.servo.start_servo()
                     
     
@@ -714,10 +659,10 @@ class Control:
         self.VisionPictureRGB_2.setPixmap(QPixmap.fromImage(image))
 
     def write_delta(self, delta_world):
-        self.tc3.write_by_name(f"Moto_to.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"Moto_to.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"Moto_to.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"Moto_to.RepythonRX", delta_world[3], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"Moto_to.RepythonRY", delta_world[4], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"Moto_to.RepythonRZ", delta_world[5], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
         

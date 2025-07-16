@@ -68,9 +68,7 @@ def servo(pose,uv,Z,p_star,lambda_gain,K):
     error_rms = np.sqrt(np.mean(e**2))
     #print("误差:",error_rms)
 
-    v = -lambda_gain * np.linalg.pinv(J) @ e
-
-    #print("当前增量在相机坐标系下:\n",v)
+    v = -lambda_gain @ np.linalg.pinv(J) @ e
 
     # 重新计算位姿增量 Td
     Td = SE3.Delta(v)
@@ -113,11 +111,13 @@ class VisualServoThread(QThread):
                 p_star = self.video_thread.p_star
                 Z = self.video_thread.Z
                 x,y,z = float(self.ui.line_x.text()),float(self.ui.line_y.text()),float(self.ui.line_z.text())
-                rx,ry,rz = float(self.ui.line_Rr.text()),float(self.ui.line_Rp.text()),float(self.ui.line_Ry.text())
+                rx,ry,rz = float(self.ui.line_Rx.text()),float(self.ui.line_Ry.text()),float(self.ui.line_Rz.text())
                 curr_pose = [x,y,z,rx,ry,rz]
                 cam_delta, world_delta, error_rms = servo(curr_pose, uv, Z, p_star, self.lambda_gain, self.video_thread.camera.K)
                 self.update_pose_signal.emit(world_delta.tolist())
-
+            else:
+                world_delta = np.array([0,0,0,0,0,0])
+                self.update_pose_signal.emit(world_delta.tolist())
             time.sleep(0.1)  # 避免CPU占用过高
 
     def stop(self):

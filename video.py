@@ -18,7 +18,6 @@ class VideoThread(QThread):
         self.uv = None
         self.p_star = None
         self.Z = None
-        self.center_z = None
         print("[DEBUG] VideoThread init called with serial:", serial)
 
     def run(self):
@@ -35,9 +34,8 @@ class VideoThread(QThread):
                 parameters = aruco.DetectorParameters_create()
                 # 输入rgb图, aruco的dictionary, 相机内参, 相机的畸变参数
                 corners, ids, rejected_img_points = aruco.detectMarkers(img_color, aruco_dict, parameters=parameters,cameraMatrix=intr_matrix, distCoeff=intr_coeffs)
-                # rvec是旋转向量， tvec是平移向量
-                rvec, tvec, markerPoints = aruco.estimatePoseSingleMarkers(corners, 0.094, intr_matrix, intr_coeffs)
-                if rvec is not None and tvec is not None:
+                
+                if corners:
                     aruco.drawDetectedMarkers(img_color, corners)
                     detected_points = corners[0][0]
 
@@ -57,6 +55,10 @@ class VideoThread(QThread):
                     self.uv = uv
                     self.p_star = p_star
                     self.Z = img_depth[int(center_point[1]), int(center_point[0])]/1000.0
+                else:
+                    self.uv = None
+                    self.p_star = None
+                    self.Z = None
 
                 img_color = cv2.resize(img_color, (467, 336))  # 注意参数是 (width, height)
 
