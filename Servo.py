@@ -119,7 +119,6 @@ class VisualServoThread(QThread):
                 world_delta = np.array([0,0,0,0,0,0])
                 self.update_pose_signal.emit(world_delta.tolist())
 
-            print("delta_speed:", world_delta)
             time.sleep(0.1)  # 避免CPU占用过高
 
     def stop(self):

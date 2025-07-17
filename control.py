@@ -576,17 +576,17 @@ class Control:
             self.servo.stop()
             self.open_servo_flag = False
             self.set_led_style(self.led3, not self.open_servo_flag)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueShiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
         else:
             self.open_servo_flag = True
             self.addLogs("捕获流程开始")
             self.set_button_style(self.button3, self.open_servo_flag)
-            lambda_gain = np.array([0.6, 0.6, 0.6, 0.0007, 0.0007, 0.0007])
+            lambda_gain = np.array([0.6, 0.6, 0.6, 0.7, 0.7, 0.7])
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
             self.servo.update_pose_signal.connect(self.write_delta)
@@ -610,12 +610,12 @@ class Control:
             self.tc3.add_variable(f"GVL.axis[{i+1}].NcToPlc.ActPos", pyads.PLCTYPE_LREAL, self.value_changed)
             self.tc3.add_variable(f"GVL.axis[{i+1}].NcToPlc.ErrorCode", pyads.PLCTYPE_UDINT, self.value_changed)
 
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueShiFu.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
 
     # 定义回调函数
     def value_changed(self, name ,value):
@@ -664,10 +664,10 @@ class Control:
         self.VisionPictureRGB_2.setPixmap(QPixmap.fromImage(convert_to_qt_format))
 
     def write_delta(self, delta_world):
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueShiFu.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
         
