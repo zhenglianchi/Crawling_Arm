@@ -37,7 +37,7 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.table.verticalHeader().setHighlightSections(False)
         self.table.verticalHeader().setSectionsClickable(False)
         # 不可编辑的文本框相关
-        for line_edit in [self.line1, self.line2, self.line3,self.line4,self.line_x,self.line_y,self.line_z,
+        for line_edit in [self.line_x,self.line_y,self.line_z,
                           self.line_Rx,self.line_Ry,self.line_Rz,self.line_Fx,self.line_Fy,self.line_Fz,self.line_Tx,self.line_Ty,self.line_Tz]:
              line_edit.setReadOnly(True)
        
