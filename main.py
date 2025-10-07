@@ -38,7 +38,9 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.table.verticalHeader().setSectionsClickable(False)
         # 不可编辑的文本框相关
         for line_edit in [self.line_x,self.line_y,self.line_z,
-                          self.line_Rx,self.line_Ry,self.line_Rz,self.line_Fx,self.line_Fy,self.line_Fz,self.line_Tx,self.line_Ty,self.line_Tz]:
+                          self.line_Rx,self.line_Ry,self.line_Rz,
+                          self.line_Fx,self.line_Fy,self.line_Fz,
+                          self.line_Tx,self.line_Ty,self.line_Tz]:
              line_edit.setReadOnly(True)
        
         # 按钮相关逻辑
@@ -55,7 +57,14 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.button_reset.clicked.connect(self.control.open_reset)
         self.button_zero.clicked.connect(self.control.open_zero)
         self.button_move.clicked.connect(self.control.open_move)
-        self.button3.clicked.connect(self.control.open_capture)
+
+
+        self.button_servo_align1.clicked.connect(self.control.servo_align)
+        self.button_linear_plan1.clicked.connect(self.control.linear_plan)
+        self.button_close_clampA1.clicked.connect(self.control.close_clampA)
+        self.button_reverse_linear_1.clicked.connect(self.control.reverse_linear)
+        self.button_joint4_reverse_1.clicked.connect(self.control.joint4_reverse)
+        self.button_release_clampB1.clicked.connect(self.control.release_clampB)
 
     # 日志显示
     def addLogs(self, *args, split=''):

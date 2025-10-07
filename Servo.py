@@ -96,6 +96,7 @@ def servo(pose,uv,Z,p_star,lambda_gain,K):
 
 class VisualServoThread(QThread):
     update_pose_signal = pyqtSignal(list)
+    finished_signal = pyqtSignal(bool) 
 
     def __init__(self, ui , lambda_gain):
         super().__init__()
@@ -115,6 +116,9 @@ class VisualServoThread(QThread):
                 curr_pose = [x,y,z,rx,ry,rz]
                 cam_delta, world_delta, error_rms = servo(curr_pose, uv, Z, p_star, self.lambda_gain, self.video_thread.camera.K)
                 self.update_pose_signal.emit(world_delta.tolist())
+                if error_rms < 1:
+                    self.finished_signal.emit(True)
+                    break
             else:
                 world_delta = np.array([0,0,0,0,0,0])
                 self.update_pose_signal.emit(world_delta.tolist())

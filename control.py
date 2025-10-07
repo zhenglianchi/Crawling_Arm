@@ -5,6 +5,7 @@ import pyads
 import re
 from video import VideoThread
 from Servo import VisualServoThread
+from Forward_planner import Forward_planner
 import numpy as np
 
 class Control:
@@ -25,14 +26,10 @@ class Control:
         self.open_zero_flag = True
         self.open_move_flag = True
 
-        self.open_machineopen_flag = False
-        self.open_dooropen_flag = False
-        self.open_doorclose_flag = False
-        self.open_dock_flag = False
-        self.open_doormoveopen_flag = False
-        self.open_machineclose_flag = False
-        self.open_target_flag = False
         self.open_servo_flag = False
+        self.open_forwardplanner_flag = False
+        self.open_reverseplanner_flag = False
+        
          # 双相机
         self.cameraA_serial="909512070942"
         self.cameraB_serial="840412061540"
@@ -68,6 +65,12 @@ class Control:
             margin-top: 0px;
         """)
             self.addLogs("Twincat连接关闭")
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
             self.tc3.stop_monitoring()
             self.tc3.variables={}
             self.tc3.close()
@@ -529,6 +532,7 @@ class Control:
             margin-top: 0px;
         """)
             self.addLogs(f"电机以{speed_text}m/s速度移动至({position_text})")
+            self.set_button_style(self.button_move,False)
     # ------------------------分系统流程相关函数----------------------------
     def set_button_style(self, button, active):
         if active:
@@ -570,7 +574,7 @@ class Control:
                 margin-top: 0px;
             """)
 
-    def open_capture(self):
+    def servo_align(self):
         if self.open_servo_flag:
             self.addLogs("捕获流程结束")
             self.servo.stop()
@@ -590,7 +594,76 @@ class Control:
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
             self.servo.update_pose_signal.connect(self.write_delta)
+            self.servo.finished_signal.connect(self.servo_judge)
             self.servo.start_servo()
+
+    def linear_plan(self):
+        if self.open_forwardplanner_flag:
+            self.addLogs("直线规划结束")
+            self.forward.stop()
+            self.open_forwardplanner_flag = False
+            self.set_led_style(self.led3, not self.open_forwardplanner_flag)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+        else:
+            self.open_forwardplanner_flag = True
+            self.addLogs("直线规划开始")
+            self.set_button_style(self.button3, self.open_forwardplanner_flag)
+            distance = 0.2
+            direction = 1
+            self.forward = Forward_planner(self, distance=distance, direction=direction)
+            self.forward.update_pose_signal.connect(self.write_delta)
+            self.forward.finished_signal.connect(self.forward_judge)
+            self.forward.start_forward()
+
+    def close_clampA(self):
+        if self.close_clampA_flag:
+            self.addLogs("夹爪A闭合结束")
+            self.close_clampA_flag = False
+            self.set_led_style(self.led3, not self.close_clampA_flag)
+        else:
+            self.close_clampA_flag = True
+            self.addLogs("夹爪A开始闭合")
+            self.set_button_style(self.button3, self.close_clampA_flag)
+            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+
+    def reverse_linear(self):
+        if self.open_reverseplanner_flag:
+            self.addLogs("直线规划结束")
+            self.forward.stop()
+            self.open_reverseplanner_flag = False
+            self.set_led_style(self.led3, not self.open_reverseplanner_flag)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+        else:
+            self.open_reverseplanner_flag = True
+            self.addLogs("直线规划开始")
+            self.set_button_style(self.button3, self.open_reverseplanner_flag)
+            distance = 0.2
+            direction = -1
+            self.forward = Forward_planner(self, distance=distance, direction=direction)
+            self.forward.update_pose_signal.connect(self.write_delta)
+            self.forward.finished_signal.connect(self.revforward_judge)
+            self.forward.start_forward()
+
+    def joint4_reverse(self):
+        if self.close_clampA_flag:
+            self.addLogs("夹爪A闭合结束")
+            self.close_clampA_flag = False
+            self.set_led_style(self.led3, not self.close_clampA_flag)
+        else:
+            self.close_clampA_flag = True
+            self.addLogs("夹爪A开始闭合")
+            self.set_button_style(self.button3, self.close_clampA_flag)
+            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
                     
     
     # 日志显示相关
@@ -671,3 +744,14 @@ class Control:
         self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
         self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
         
+    def servo_judge(self, finished_flag = False):
+        if finished_flag:
+            self.servo_align()
+
+    def forward_judge(self, finished_flag = False):
+        if finished_flag:
+            self.linear_plan()
+
+    def revforward_judge(self, finished_flag = False):
+        if finished_flag:
+            self.reverse_linear()
