@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QAbstractItemView
 from PyQt5.QtCore import Qt
 from control import Control
 import faulthandler
+from functools import partial
 faulthandler.enable()
  
 class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
@@ -59,12 +60,29 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.button_move.clicked.connect(self.control.open_move)
 
 
-        self.button_servo_align1.clicked.connect(self.control.servo_align)
-        self.button_linear_plan1.clicked.connect(self.control.linear_plan)
-        self.button_close_clampA1.clicked.connect(self.control.close_clampA)
-        self.button_reverse_linear_1.clicked.connect(self.control.reverse_linear)
-        self.button_joint4_reverse_1.clicked.connect(self.control.joint4_reverse)
-        self.button_release_clampB1.clicked.connect(self.control.release_clampB)
+        self.button_servo_align1.clicked.connect(partial(self.control.servo_align,1))
+        self.button_linear_plan1.clicked.connect(partial(self.control.linear_plan,1))
+        self.button_close_clampA1.clicked.connect(partial(self.control.close_clampA,1))
+        self.button_reverse_linear_1.clicked.connect(partial(self.control.reverse_linear,1))
+        self.button_joint4_reverse_1.clicked.connect(partial(self.control.joint4_reverse,1))
+        self.button_release_clampB1.clicked.connect(partial(self.control.release_clampB,1))
+
+        self.button_servo_align2.clicked.connect(partial(self.control.servo_align,2))
+        self.button_linear_plan2.clicked.connect(partial(self.control.linear_plan,2))
+        self.button_close_clampA2.clicked.connect(partial(self.control.close_clampA,2))
+        self.button_reverse_linear_2.clicked.connect(partial(self.control.reverse_linear,2))
+        self.button_joint4_reverse_2.clicked.connect(partial(self.control.joint4_reverse,2))
+        self.button_release_clampB2.clicked.connect(partial(self.control.release_clampB,2))
+
+        self.button_servo_align3.clicked.connect(partial(self.control.servo_align,3))
+        self.button_linear_plan3.clicked.connect(partial(self.control.linear_plan,3))
+        self.button_close_clampA3.clicked.connect(partial(self.control.close_clampA,3))
+        self.button_reverse_linear_3.clicked.connect(partial(self.control.reverse_linear,3))
+        self.button_joint4_reverse_3.clicked.connect(partial(self.control.joint4_reverse,3))
+        self.button_release_clampB3.clicked.connect(partial(self.control.release_clampB,3))
+        self.log_pos.clicked.connect(self.control.log_position)
+
+        self.mounting4.clicked.connect(self.control.mounting)
 
     # 日志显示
     def addLogs(self, *args, split=''):

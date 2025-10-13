@@ -568,22 +568,22 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.widget_14.setObjectName("widget_14")
-        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.widget_14)
-        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        #self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.widget_14)
+        #self.verticalLayout_12.setObjectName("verticalLayout_12")
         self.widget_22 = QtWidgets.QWidget(self.widget_14)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.widget_22.sizePolicy().hasHeightForWidth())
         self.widget_22.setSizePolicy(sizePolicy)
-        self.widget_22.setMinimumSize(QtCore.QSize(0, 45))
+        self.widget_22.setMinimumSize(QtCore.QSize(0, 0))
         self.widget_22.setStyleSheet("border:none\n"
 "")
-        self.widget_22.setObjectName("widget_22")
-        self.horizontalLayout_20 = QtWidgets.QHBoxLayout(self.widget_22)
-        self.horizontalLayout_20.setContentsMargins(-1, 5, -1, 0)
-        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
-        self.button1 = QtWidgets.QPushButton(self.widget_22)
+        # 使用 QVBoxLayout
+        self.verticalLayout_201 = QtWidgets.QVBoxLayout(self.widget_22)
+        self.verticalLayout_201.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_201.setSpacing(5)
+        '''self.button1 = QtWidgets.QPushButton(self.widget_22)
         self.button1.setMinimumSize(QtCore.QSize(120, 0))
         self.button1.setStyleSheet("background-color: #f4f4f4;\n"
 "color: black;\n"
@@ -596,9 +596,9 @@ class Ui_MainWindow(object):
 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
 "margin-top: 0px;")
         self.button1.setObjectName("button1")
-        self.horizontalLayout_20.addWidget(self.button1)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_20.addItem(spacerItem12)
+        self.horizontalLayout_20.addWidget(self.button1)'''
+        #spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_20.addItem(spacerItem12)
         '''self.led1 = QtWidgets.QLabel(self.widget_22)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -614,8 +614,8 @@ class Ui_MainWindow(object):
         self.led1.setText("")
         self.led1.setObjectName("led1")
         self.horizontalLayout_20.addWidget(self.led1)'''
-        spacerItem13 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_20.addItem(spacerItem13)
+        #spacerItem13 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_20.addItem(spacerItem13)
 
         self.button_servo_align1 = QtWidgets.QPushButton(self.widget_22)
         self.button_linear_plan1 = QtWidgets.QPushButton(self.widget_22)
@@ -623,13 +623,15 @@ class Ui_MainWindow(object):
         self.button_release_clampB1 = QtWidgets.QPushButton(self.widget_22)
         self.button_reverse_linear_1 = QtWidgets.QPushButton(self.widget_22)
         self.button_joint4_reverse_1 = QtWidgets.QPushButton(self.widget_22)
-        for btn in [self.button_servo_align1, self.button_linear_plan1, self.button_close_clampA1, self.button_release_clampB1,self.button_reverse_linear_1,self.button_joint4_reverse_1]:
+        for i,btn in enumerate([self.button_servo_align1, self.button_linear_plan1, self.button_close_clampA1, self.button_release_clampB1,self.button_reverse_linear_1,self.button_joint4_reverse_1]):
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
+                "font: 15pt \"Adobe 黑体 Std R\";\n"
                 "   \n"
                 #"padding: 5px 10px;\n"
                 "\n"
                 "border-left:0px;\n"
+                "margin-left: 60px;"
                 "border-top:0px;\n"
                 " border-right: 2px solid #a3a3a3;  /* 右边边框 */\n"
                 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
@@ -639,8 +641,32 @@ class Ui_MainWindow(object):
                 sizePolicy.setVerticalStretch(0)
                 sizePolicy.setHeightForWidth(btn.sizePolicy().hasHeightForWidth())
                 btn.setSizePolicy(sizePolicy)
-                btn.setMinimumSize(QtCore.QSize(90, 35))
-                self.horizontalLayout_20.addWidget(btn)
+                btn.setMinimumSize(QtCore.QSize(400, 50))
+
+                # ====== 新增：创建 QLabel 并放入水平布局 ======
+                label = QtWidgets.QLabel()
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
+                label.setSizePolicy(sizePolicy)
+                label.setMinimumSize(QtCore.QSize(30, 30))
+                label.setStyleSheet("background-color: rgb(255, 0, 0);\n"
+        "border-radius: 15px; \n"
+        "border: 1px solid gray;\n"
+        "margin-top: 0px;\n"
+        "")
+                label.setText("")
+                label.setObjectName(f"led{i+1}")
+
+                h_layout = QtWidgets.QHBoxLayout()
+                h_layout.addWidget(btn)
+                h_layout.addWidget(label)
+
+                self.verticalLayout_201.addLayout(h_layout)
+                self.verticalLayout_201.setStretch(i, 1)
+                setattr(self,f"led{i+1}",label)
+
         self.button_servo_align1.setObjectName("button_servo_align1")
         self.button_linear_plan1.setObjectName("button_linear_plan1")
         self.button_close_clampA1.setObjectName("button_close_clampA1")
@@ -649,7 +675,7 @@ class Ui_MainWindow(object):
         self.button_joint4_reverse_1.setObjectName("button_joint4_reverse_1")
 
 
-        self.verticalLayout_12.addWidget(self.widget_22)
+        #self.verticalLayout_12.addWidget(self.widget_22)
         self.widget_23 = QtWidgets.QWidget(self.widget_14)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -660,10 +686,11 @@ class Ui_MainWindow(object):
         self.widget_23.setStyleSheet("border:none\n"
 "")
         self.widget_23.setObjectName("widget_23")
-        self.horizontalLayout_21 = QtWidgets.QHBoxLayout(self.widget_23)
-        self.horizontalLayout_21.setContentsMargins(-1, 5, -1, 0)
-        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
-        self.button2 = QtWidgets.QPushButton(self.widget_23)
+        # 使用 QVBoxLayout
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.widget_23)
+        self.verticalLayout_21.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_21.setSpacing(5)
+        '''self.button2 = QtWidgets.QPushButton(self.widget_23)
         self.button2.setMinimumSize(QtCore.QSize(120, 0))
         self.button2.setStyleSheet("background-color: #f4f4f4;\n"
 "color: black;\n"
@@ -676,9 +703,9 @@ class Ui_MainWindow(object):
 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
 "margin-top: 0px;")
         self.button2.setObjectName("button2")
-        self.horizontalLayout_21.addWidget(self.button2)
-        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_21.addItem(spacerItem14)
+        self.horizontalLayout_21.addWidget(self.button2)'''
+        #spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_21.addItem(spacerItem14)
         '''self.led2 = QtWidgets.QLabel(self.widget_23)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -694,8 +721,8 @@ class Ui_MainWindow(object):
         self.led2.setText("")
         self.led2.setObjectName("led2")
         self.horizontalLayout_21.addWidget(self.led2)'''
-        spacerItem15 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_21.addItem(spacerItem15)
+        #spacerItem15 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_21.addItem(spacerItem15)
 
         self.button_servo_align2 = QtWidgets.QPushButton(self.widget_23)
         self.button_linear_plan2 = QtWidgets.QPushButton(self.widget_23)
@@ -703,13 +730,15 @@ class Ui_MainWindow(object):
         self.button_release_clampB2 = QtWidgets.QPushButton(self.widget_23)
         self.button_reverse_linear_2 = QtWidgets.QPushButton(self.widget_23)
         self.button_joint4_reverse_2 = QtWidgets.QPushButton(self.widget_23)
-        for btn in [self.button_servo_align2, self.button_linear_plan2, self.button_close_clampA2, self.button_release_clampB2,self.button_reverse_linear_2,self.button_joint4_reverse_2]:
+        for i,btn in enumerate([self.button_servo_align2, self.button_linear_plan2, self.button_close_clampA2, self.button_release_clampB2,self.button_reverse_linear_2,self.button_joint4_reverse_2]):
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
+                "font: 15pt \"Adobe 黑体 Std R\";\n"
                 "   \n"
                 #"padding: 5px 10px;\n"
                 "\n"
                 "border-left:0px;\n"
+                "margin-left: 60px;"
                 "border-top:0px;\n"
                 " border-right: 2px solid #a3a3a3;  /* 右边边框 */\n"
                 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
@@ -719,8 +748,33 @@ class Ui_MainWindow(object):
                 sizePolicy.setVerticalStretch(0)
                 sizePolicy.setHeightForWidth(btn.sizePolicy().hasHeightForWidth())
                 btn.setSizePolicy(sizePolicy)
-                btn.setMinimumSize(QtCore.QSize(90, 35))
-                self.horizontalLayout_21.addWidget(btn)
+                btn.setMinimumSize(QtCore.QSize(400, 50))
+
+                # ====== 新增：创建 QLabel 并放入水平布局 ======
+                label = QtWidgets.QLabel()
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
+                label.setSizePolicy(sizePolicy)
+                label.setMinimumSize(QtCore.QSize(30, 30))
+                label.setStyleSheet("background-color: rgb(255, 0, 0);\n"
+        "border-radius: 15px; \n"
+        "border: 1px solid gray;\n"
+        "margin-top: 0px;\n"
+        "")
+                label.setText("")
+                label.setObjectName(f"led{i+11}")
+
+                h_layout = QtWidgets.QHBoxLayout()
+                h_layout.addWidget(btn)
+                h_layout.addWidget(label)
+
+                self.verticalLayout_21.addLayout(h_layout)
+                self.verticalLayout_21.setStretch(i, 1)
+                setattr(self,f"led{i+11}",label)
+                
+
         self.button_servo_align2.setObjectName("button_servo_align2")
         self.button_linear_plan2.setObjectName("button_linear_plan2")
         self.button_close_clampA2.setObjectName("button_close_clampA2")
@@ -728,7 +782,7 @@ class Ui_MainWindow(object):
         self.button_reverse_linear_2.setObjectName("button_reverse_linear_2")
         self.button_joint4_reverse_2.setObjectName("button_joint4_reverse_2")
 
-        self.verticalLayout_12.addWidget(self.widget_23)
+        #self.verticalLayout_12.addWidget(self.widget_23)
         self.widget_24 = QtWidgets.QWidget(self.widget_14)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -739,10 +793,10 @@ class Ui_MainWindow(object):
         self.widget_24.setStyleSheet("border:none\n"
 "")
         self.widget_24.setObjectName("widget_24")
-        self.horizontalLayout_22 = QtWidgets.QHBoxLayout(self.widget_24)
-        self.horizontalLayout_22.setContentsMargins(-1, 5, -1, 0)
-        self.horizontalLayout_22.setObjectName("horizontalLayout_22")
-        self.button3 = QtWidgets.QPushButton(self.widget_24)
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.widget_24)
+        self.verticalLayout_22.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_22.setSpacing(5)
+        '''self.button3 = QtWidgets.QPushButton(self.widget_24)
         self.button3.setMinimumSize(QtCore.QSize(120, 0))
         self.button3.setStyleSheet("background-color: #f4f4f4;\n"
 "color: black;\n"
@@ -755,9 +809,9 @@ class Ui_MainWindow(object):
 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
 "margin-top: 0px;")
         self.button3.setObjectName("button3")
-        self.horizontalLayout_22.addWidget(self.button3)
-        spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_22.addItem(spacerItem16)
+        self.horizontalLayout_22.addWidget(self.button3)'''
+        #spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_22.addItem(spacerItem16)
         '''self.led3 = QtWidgets.QLabel(self.widget_24)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -773,8 +827,8 @@ class Ui_MainWindow(object):
         self.led3.setText("")
         self.led3.setObjectName("led3")
         self.horizontalLayout_22.addWidget(self.led3)'''
-        spacerItem17 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_22.addItem(spacerItem17)
+        #spacerItem17 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_22.addItem(spacerItem17)
 
         self.button_servo_align3 = QtWidgets.QPushButton(self.widget_24)
         self.button_linear_plan3 = QtWidgets.QPushButton(self.widget_24)
@@ -782,11 +836,13 @@ class Ui_MainWindow(object):
         self.button_release_clampB3 = QtWidgets.QPushButton(self.widget_24)
         self.button_reverse_linear_3 = QtWidgets.QPushButton(self.widget_24)
         self.button_joint4_reverse_3 = QtWidgets.QPushButton(self.widget_24)
-        #self.log_pos = QtWidgets.QPushButton(self.widget_24)
-        for btn in [self.button_servo_align3, self.button_linear_plan3, self.button_close_clampA3, self.button_release_clampB3,self.button_reverse_linear_3,self.button_joint4_reverse_3]:
+        self.log_pos = QtWidgets.QPushButton(self.widget_24)
+        for i,btn in enumerate([self.button_servo_align3, self.button_linear_plan3, self.button_close_clampA3, self.button_release_clampB3,self.button_reverse_linear_3,self.button_joint4_reverse_3,self.log_pos]):
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
+                "font: 15pt \"Adobe 黑体 Std R\";\n"
                 "   \n"
+                "margin-left: 60px;"
                 #"padding: 5px 10px;\n"
                 "\n"
                 "border-left:0px;\n"
@@ -799,17 +855,41 @@ class Ui_MainWindow(object):
                 sizePolicy.setVerticalStretch(0)
                 sizePolicy.setHeightForWidth(btn.sizePolicy().hasHeightForWidth())
                 btn.setSizePolicy(sizePolicy)
-                btn.setMinimumSize(QtCore.QSize(90, 35))
-                self.horizontalLayout_22.addWidget(btn)
+                btn.setMinimumSize(QtCore.QSize(400, 50))
+
+                # ====== 新增：创建 QLabel 并放入水平布局 ======
+                label = QtWidgets.QLabel()
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
+                label.setSizePolicy(sizePolicy)
+                label.setMinimumSize(QtCore.QSize(30, 30))
+                label.setStyleSheet("background-color: rgb(255, 0, 0);\n"
+        "border-radius: 15px; \n"
+        "border: 1px solid gray;\n"
+        "margin-top: 0px;\n"
+        "")
+                label.setText("")
+                label.setObjectName(f"led{i+21}")
+
+                h_layout = QtWidgets.QHBoxLayout()
+                h_layout.addWidget(btn)
+                h_layout.addWidget(label)
+
+                self.verticalLayout_22.addLayout(h_layout)
+                self.verticalLayout_22.setStretch(i,1)
+                setattr(self,f"led{i+21}",label)
+
         self.button_servo_align3.setObjectName("button_servo_align3")
         self.button_linear_plan3.setObjectName("button_linear_plan3")
         self.button_close_clampA3.setObjectName("button_close_clampA3")
         self.button_release_clampB3.setObjectName("button_release_clampB3")
         self.button_reverse_linear_3.setObjectName("button_reverse_linear_3")
         self.button_joint4_reverse_3.setObjectName("button_joint4_reverse_3")
-        #self.log_pos.setObjectName("log_pos")
+        self.log_pos.setObjectName("log_pos")
 
-        self.verticalLayout_12.addWidget(self.widget_24)
+        #self.verticalLayout_12.addWidget(self.widget_24)
         self.widget_28 = QtWidgets.QWidget(self.widget_14)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -820,10 +900,10 @@ class Ui_MainWindow(object):
         self.widget_28.setStyleSheet("border:none\n"
 "")
         self.widget_28.setObjectName("widget_28")
-        self.horizontalLayout_26 = QtWidgets.QHBoxLayout(self.widget_28)
-        self.horizontalLayout_26.setContentsMargins(-1, 5, -1, 0)
-        self.horizontalLayout_26.setObjectName("horizontalLayout_26")
-        self.button4 = QtWidgets.QPushButton(self.widget_28)
+        self.verticalLayout_26 = QtWidgets.QVBoxLayout(self.widget_28)
+        self.verticalLayout_26.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_26.setSpacing(5)
+        '''self.button4 = QtWidgets.QPushButton(self.widget_28)
         self.button4.setMinimumSize(QtCore.QSize(120, 0))
         self.button4.setStyleSheet("background-color: #f4f4f4;\n"
 "color: black;\n"
@@ -836,9 +916,9 @@ class Ui_MainWindow(object):
 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
 "margin-top: 0px;")
         self.button4.setObjectName("button4")
-        self.horizontalLayout_26.addWidget(self.button4)
-        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_26.addItem(spacerItem18)
+        self.horizontalLayout_26.addWidget(self.button4)'''
+        #spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_26.addItem(spacerItem18)
         '''self.led4 = QtWidgets.QLabel(self.widget_28)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -854,19 +934,16 @@ class Ui_MainWindow(object):
         self.led4.setText("")
         self.led4.setObjectName("led4")
         self.horizontalLayout_26.addWidget(self.led4)'''
-        spacerItem19 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_26.addItem(spacerItem19)
+        #spacerItem19 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        #self.horizontalLayout_26.addItem(spacerItem19)
 
-        self.button_servo_align4 = QtWidgets.QPushButton(self.widget_28)
-        self.button_linear_plan4 = QtWidgets.QPushButton(self.widget_28)
-        self.button_close_clampA4 = QtWidgets.QPushButton(self.widget_28)
-        self.button_release_clampB4 = QtWidgets.QPushButton(self.widget_28)
-        self.button_reverse_linear_4 = QtWidgets.QPushButton(self.widget_28)
-        self.button_joint4_reverse_4 = QtWidgets.QPushButton(self.widget_28)
-        for btn in [self.button_servo_align4, self.button_linear_plan4, self.button_close_clampA4, self.button_release_clampB4,self.button_reverse_linear_4,self.button_joint4_reverse_4]:
+        self.mounting4 = QtWidgets.QPushButton(self.widget_28)
+        for btn in [self.mounting4]:
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
+                "font: 15pt \"Adobe 黑体 Std R\";\n"
                 "   \n"
+                "margin-left: 60px;"
                 #"padding: 5px 10px;\n"
                 "\n"
                 "border-left:0px;\n"
@@ -879,16 +956,109 @@ class Ui_MainWindow(object):
                 sizePolicy.setVerticalStretch(0)
                 sizePolicy.setHeightForWidth(btn.sizePolicy().hasHeightForWidth())
                 btn.setSizePolicy(sizePolicy)
-                btn.setMinimumSize(QtCore.QSize(90, 35))
-                self.horizontalLayout_26.addWidget(btn)
-        self.button_servo_align4.setObjectName("button_servo_align4")
-        self.button_linear_plan4.setObjectName("button_linear_plan4")
-        self.button_close_clampA4.setObjectName("button_close_clampA4")
-        self.button_release_clampB4.setObjectName("button_release_clampB4")
-        self.button_reverse_linear_4.setObjectName("button_reverse_linear_4")
-        self.button_joint4_reverse_4.setObjectName("button_joint4_reverse_4")
+                btn.setMinimumSize(QtCore.QSize(400, 50))
 
-        self.verticalLayout_12.addWidget(self.widget_28)
+                # ====== 新增：创建 QLabel 并放入水平布局 ======
+                label = QtWidgets.QLabel()
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
+                label.setSizePolicy(sizePolicy)
+                label.setMinimumSize(QtCore.QSize(30, 30))
+                label.setStyleSheet("background-color: rgb(255, 0, 0);\n"
+        "border-radius: 15px; \n"
+        "border: 1px solid gray;\n"
+        "margin-top: 0px;\n"
+        "")
+                label.setText("")
+                label.setObjectName(f"led31")
+
+                h_layout = QtWidgets.QHBoxLayout()
+                h_layout.addWidget(btn)
+                h_layout.addWidget(label)
+
+                self.verticalLayout_26.addLayout(h_layout)
+                self.verticalLayout_26.setStretch(i,1)
+                setattr(self,f"led31",label)
+
+        self.mounting4.setObjectName("mounting4")
+
+        self.button1 = QtWidgets.QPushButton(self.widget_14)
+        self.button1.setMinimumSize(QtCore.QSize(180, 70))
+        self.button1.setStyleSheet(
+              "font: 15pt \"Adobe 黑体 Std R\";\n"
+              "background-color: #f4f4f4;\n"
+                "color: black;\n"
+                "padding: 10px 10px;\n"
+                "border-left:0px;\n"
+                "border-top:5px;\n"
+                "border-right: 2px solid #a3a3a3;\n"
+                "border-bottom: 5px solid #a3a3a3;"
+                )
+        self.button1.setObjectName("button1")
+
+        self.button2 = QtWidgets.QPushButton(self.widget_14)
+        self.button2.setMinimumSize(QtCore.QSize(180, 70))
+        self.button2.setStyleSheet(self.button1.styleSheet())
+        self.button2.setObjectName("button2")
+
+        self.button3 = QtWidgets.QPushButton(self.widget_14)
+        self.button3.setMinimumSize(QtCore.QSize(180, 70))
+        self.button3.setStyleSheet(self.button1.styleSheet())
+        self.button3.setObjectName("button3")
+
+        self.button4 = QtWidgets.QPushButton(self.widget_14)
+        self.button4.setMinimumSize(QtCore.QSize(180, 70))
+        self.button4.setStyleSheet(self.button1.styleSheet())
+        self.button4.setObjectName("button4")
+        # 确保按钮自身允许垂直拉伸
+        for btn in [self.button1, self.button2, self.button3, self.button4]:
+            btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        #self.verticalLayout_12.addWidget(self.widget_28)
+        # ========== 3. 设置 widget_14 的布局（水平）==========
+        main_layout = QtWidgets.QHBoxLayout(self.widget_14)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # 左侧导航
+        nav_layout = QtWidgets.QVBoxLayout()
+        nav_layout.setAlignment(QtCore.Qt.AlignTop)
+        nav_layout.addWidget(self.button1)
+        nav_layout.addWidget(self.button2)
+        nav_layout.addWidget(self.button3)
+        nav_layout.addWidget(self.button4)
+
+        nav_widget = QtWidgets.QWidget()
+        nav_widget.setLayout(nav_layout)
+        nav_widget.setFixedWidth(200)
+
+        # 关键：让按钮在垂直方向均匀拉伸（等高并填满空间）
+        nav_layout.setStretch(0, 1)  # button1
+        nav_layout.setStretch(1, 1)  # button2
+        nav_layout.setStretch(2, 1)  # button3
+        nav_layout.setStretch(3, 1)  # button4
+
+        # 右侧内容
+        self.stacked_widget = QtWidgets.QStackedWidget()
+        self.stacked_widget.addWidget(self.widget_22)
+        self.stacked_widget.addWidget(self.widget_23)
+        self.stacked_widget.addWidget(self.widget_24)
+        self.stacked_widget.addWidget(self.widget_28)
+
+        # 连接信号
+        self.button1.clicked.connect(lambda: self.switch_page(0))
+        self.button2.clicked.connect(lambda: self.switch_page(1))
+        self.button3.clicked.connect(lambda: self.switch_page(2))
+        self.button4.clicked.connect(lambda: self.switch_page(3))
+
+        # 默认选中
+        self.button1.setChecked(True)
+        self.stacked_widget.setCurrentIndex(0)
+
+        # 添加到主布局
+        main_layout.addWidget(nav_widget)
+        main_layout.addWidget(self.stacked_widget)
+
         self.verticalLayout_16.addWidget(self.widget_14)
         self.verticalLayout_2.addWidget(self.groupBox_5)
         self.groupBox_4 = QtWidgets.QGroupBox(self.groupTarget)
@@ -1325,39 +1495,34 @@ class Ui_MainWindow(object):
         self.button_move.setText(_translate("MainWindow", "移动"))
         self.label_44.setText(_translate("MainWindow", "速度"))
         self.groupBox_5.setTitle(_translate("MainWindow", "分系统流程"))
-        self.button1.setText(_translate("MainWindow", "由A到B"))
-        self.button2.setText(_translate("MainWindow", "由B到C"))
-        self.button3.setText(_translate("MainWindow", "由C到D"))
-        self.button4.setText(_translate("MainWindow", "由D到E"))
+        self.button1.setText(_translate("MainWindow", "第一步爬行"))
+        self.button2.setText(_translate("MainWindow", "第二步爬行"))
+        self.button3.setText(_translate("MainWindow", "第三步爬行"))
+        self.button4.setText(_translate("MainWindow", "装配"))
 
         self.button_servo_align1.setText(_translate("MainWindow", "伺服对齐"))
         self.button_linear_plan1.setText(_translate("MainWindow", "直线规划"))
-        self.button_close_clampA1.setText(_translate("MainWindow", "闭合夹爪A"))
-        self.button_release_clampB1.setText(_translate("MainWindow", "松开夹爪B"))
+        self.button_close_clampA1.setText(_translate("MainWindow", "闭合末端夹爪"))
+        self.button_release_clampB1.setText(_translate("MainWindow", "松开基座夹爪"))
         self.button_reverse_linear_1.setText(_translate("MainWindow", "反向规划"))
         self.button_joint4_reverse_1.setText(_translate("MainWindow", "反转关节4"))
 
         self.button_servo_align2.setText(_translate("MainWindow", "伺服对齐"))
         self.button_linear_plan2.setText(_translate("MainWindow", "直线规划"))
-        self.button_close_clampA2.setText(_translate("MainWindow", "闭合夹爪B"))
-        self.button_release_clampB2.setText(_translate("MainWindow", "松开夹爪A"))
+        self.button_close_clampA2.setText(_translate("MainWindow", "闭合末端夹爪"))
+        self.button_release_clampB2.setText(_translate("MainWindow", "松开基座夹爪"))
         self.button_reverse_linear_2.setText(_translate("MainWindow", "反向规划"))
         self.button_joint4_reverse_2.setText(_translate("MainWindow", "反转关节4"))
 
         self.button_servo_align3.setText(_translate("MainWindow", "伺服对齐"))
         self.button_linear_plan3.setText(_translate("MainWindow", "直线规划"))
-        self.button_close_clampA3.setText(_translate("MainWindow", "闭合夹爪A"))
-        self.button_release_clampB3.setText(_translate("MainWindow", "松开夹爪B"))
+        self.button_close_clampA3.setText(_translate("MainWindow", "闭合末端夹爪"))
+        self.button_release_clampB3.setText(_translate("MainWindow", "松开基座夹爪"))
         self.button_reverse_linear_3.setText(_translate("MainWindow", "反向规划"))
         self.button_joint4_reverse_3.setText(_translate("MainWindow", "反转关节4"))
-        #self.log_pos.setText(_translate("MainWindow", "记录位置"))
+        self.log_pos.setText(_translate("MainWindow", "记录位置"))
 
-        self.button_servo_align4.setText(_translate("MainWindow", "伺服对齐"))
-        self.button_linear_plan4.setText(_translate("MainWindow", "直线规划"))
-        self.button_close_clampA4.setText(_translate("MainWindow", "闭合夹爪B"))
-        self.button_release_clampB4.setText(_translate("MainWindow", "松开夹爪A"))
-        self.button_reverse_linear_4.setText(_translate("MainWindow", "反向规划"))
-        self.button_joint4_reverse_4.setText(_translate("MainWindow", "反转关节4"))
+        self.mounting4.setText(_translate("MainWindow", "装配"))
 
         self.groupBox_4.setTitle(_translate("MainWindow", "日志"))
         self.groupBox_3.setTitle(_translate("MainWindow", "数据监控"))
@@ -1402,3 +1567,7 @@ class Ui_MainWindow(object):
         item = self.table.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "报警号"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
+
+    # ====== 添加切换方法（放在你的类中）======
+    def switch_page(self, index):
+        self.stacked_widget.setCurrentIndex(index)

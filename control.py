@@ -29,6 +29,10 @@ class Control:
         self.open_servo_flag = False
         self.open_forwardplanner_flag = False
         self.open_reverseplanner_flag = False
+        self.close_clampA_flag = False
+        self.reverse_joint4_flag = False
+        self.release_clampB_flag = False
+        
         
          # 双相机
         self.cameraA_serial="909512070942"
@@ -538,24 +542,16 @@ class Control:
         if active:
             button.setStyleSheet("""
                 background-color: gray;
+                font: 15pt \"Adobe 黑体 Std R\";
                 color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
+                margin-left: 60px;
             """)
         else:
             button.setStyleSheet("""
-                background-color: #f3f3f3;
+                background-color: #f4f4f4;
                 color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
+                font: 15pt \"Adobe 黑体 Std R\";
+                margin-left: 60px;
             """)
 
     def set_led_style(self, led, active):
@@ -574,12 +570,22 @@ class Control:
                 margin-top: 0px;
             """)
 
-    def servo_align(self):
+    def servo_align(self,step):
+        # 这里step代表第几步爬行触发的按钮
         if self.open_servo_flag:
             self.addLogs("捕获流程结束")
             self.servo.stop()
             self.open_servo_flag = False
-            self.set_led_style(self.led3, not self.open_servo_flag)
+            #self.set_led_style(self.led3, not self.open_servo_flag)
+            if step == 1:
+                self.set_button_style(self.button_servo_align1, self.open_servo_flag)
+                self.set_led_style(self.led1,not self.open_servo_flag)
+            elif step == 2:
+                self.set_button_style(self.button_servo_align2, self.open_servo_flag)
+                self.set_led_style(self.led11,not self.open_servo_flag)
+            elif step == 3:
+                self.set_button_style(self.button_servo_align3, self.open_servo_flag)
+                self.set_led_style(self.led21,not self.open_servo_flag)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
@@ -589,7 +595,13 @@ class Control:
         else:
             self.open_servo_flag = True
             self.addLogs("捕获流程开始")
-            self.set_button_style(self.button3, self.open_servo_flag)
+            if step == 1:
+                self.set_button_style(self.button_servo_align1, self.open_servo_flag)
+            elif step == 2:
+                self.set_button_style(self.button_servo_align2, self.open_servo_flag)
+            elif step == 3:
+                self.set_button_style(self.button_servo_align3, self.open_servo_flag)
+
             lambda_gain = np.array([0.6, 0.6, 0.6, 0.7, 0.7, 0.7])
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
@@ -597,12 +609,21 @@ class Control:
             self.servo.finished_signal.connect(self.servo_judge)
             self.servo.start_servo()
 
-    def linear_plan(self):
+    def linear_plan(self,step):
         if self.open_forwardplanner_flag:
             self.addLogs("直线规划结束")
             self.forward.stop()
             self.open_forwardplanner_flag = False
-            self.set_led_style(self.led3, not self.open_forwardplanner_flag)
+            if step == 1:
+                self.set_button_style(self.button_linear_plan1, self.open_forwardplanner_flag)
+                self.set_led_style(self.led2,not self.open_forwardplanner_flag)
+            elif step == 2:
+                self.set_button_style(self.button_linear_plan2, self.open_forwardplanner_flag)
+                self.set_led_style(self.led12,not self.open_forwardplanner_flag)
+            elif step == 3:
+                self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
+                self.set_led_style(self.led22,not self.open_forwardplanner_flag)
+            #self.set_led_style(self.led3, not self.open_forwardplanner_flag)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
@@ -612,7 +633,12 @@ class Control:
         else:
             self.open_forwardplanner_flag = True
             self.addLogs("直线规划开始")
-            self.set_button_style(self.button3, self.open_forwardplanner_flag)
+            if step == 1:
+                self.set_button_style(self.button_linear_plan1, self.open_forwardplanner_flag)
+            elif step == 2:
+                self.set_button_style(self.button_linear_plan2, self.open_forwardplanner_flag)
+            elif step == 3:
+                self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
             distance = 0.2
             direction = 1
             self.forward = Forward_planner(self, distance=distance, direction=direction)
@@ -620,23 +646,71 @@ class Control:
             self.forward.finished_signal.connect(self.forward_judge)
             self.forward.start_forward()
 
-    def close_clampA(self):
+    def close_clampA(self,step):
         if self.close_clampA_flag:
             self.addLogs("夹爪A闭合结束")
             self.close_clampA_flag = False
-            self.set_led_style(self.led3, not self.close_clampA_flag)
+            if step == 1:
+                self.set_button_style(self.button_close_clampA1, self.close_clampA_flag)
+                self.set_led_style(self.led3,not self.close_clampA_flag)
+            elif step == 2:
+                self.set_button_style(self.button_close_clampA2, self.close_clampA_flag)
+                self.set_led_style(self.led13,not self.close_clampA_flag)
+            elif step == 3:
+                self.set_button_style(self.button_close_clampA3, self.close_clampA_flag)
+                self.set_led_style(self.led23,not self.close_clampA_flag)
+            #self.set_led_style(self.led3, not self.close_clampA_flag)
         else:
             self.close_clampA_flag = True
             self.addLogs("夹爪A开始闭合")
-            self.set_button_style(self.button3, self.close_clampA_flag)
+            if step == 1:
+                self.set_button_style(self.button_close_clampA1, self.close_clampA_flag)
+            elif step == 2:
+                self.set_button_style(self.button_close_clampA2, self.close_clampA_flag)
+            elif step == 3:
+                self.set_button_style(self.button_close_clampA3, self.close_clampA_flag)
             self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
 
-    def reverse_linear(self):
+    def release_clampB(self,step):
+        if self.release_clampB_flag:
+            self.addLogs("夹爪B松开结束")
+            self.release_clampB_flag = False
+            if step == 1:
+                self.set_button_style(self.button_release_clampB1, self.release_clampB_flag)
+                self.set_led_style(self.led4,not self.release_clampB_flag)
+            elif step == 2:
+                self.set_button_style(self.button_release_clampB2, self.release_clampB_flag)
+                self.set_led_style(self.led14,not self.release_clampB_flag)
+            elif step == 3:
+                self.set_button_style(self.button_release_clampB3, self.release_clampB_flag)
+                self.set_led_style(self.led24,not self.release_clampB_flag)
+            #self.set_led_style(self.led3, not self.release_clampB_flag)
+        else:
+            self.release_clampB_flag = True
+            self.addLogs("夹爪B开始松开")
+            if step == 1:
+                self.set_button_style(self.button_release_clampB1, self.release_clampB_flag)
+            elif step == 2:
+                self.set_button_style(self.button_release_clampB2, self.release_clampB_flag)
+            elif step == 3:
+                self.set_button_style(self.button_release_clampB3, self.release_clampB_flag)
+            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+
+    def reverse_linear(self,step):
         if self.open_reverseplanner_flag:
             self.addLogs("直线规划结束")
             self.forward.stop()
             self.open_reverseplanner_flag = False
-            self.set_led_style(self.led3, not self.open_reverseplanner_flag)
+            if step == 1:
+                self.set_button_style(self.button_reverse_linear_1, self.open_reverseplanner_flag)
+                self.set_led_style(self.led5,not self.open_reverseplanner_flag)
+            elif step == 2:
+                self.set_button_style(self.button_reverse_linear_2, self.open_reverseplanner_flag)
+                self.set_led_style(self.led15,not self.open_reverseplanner_flag)
+            elif step == 3:
+                self.set_button_style(self.button_reverse_linear_3, self.open_reverseplanner_flag)
+                self.set_led_style(self.led25,not self.open_reverseplanner_flag)
+            #self.set_led_style(self.led3, not self.open_reverseplanner_flag)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
@@ -646,7 +720,12 @@ class Control:
         else:
             self.open_reverseplanner_flag = True
             self.addLogs("直线规划开始")
-            self.set_button_style(self.button3, self.open_reverseplanner_flag)
+            if step == 1:
+                self.set_button_style(self.button_reverse_linear_1, self.open_reverseplanner_flag)
+            elif step == 2:
+                self.set_button_style(self.button_reverse_linear_2, self.open_reverseplanner_flag)
+            elif step == 3:
+                self.set_button_style(self.button_reverse_linear_3, self.open_reverseplanner_flag)
             distance = 0.2
             direction = -1
             self.forward = Forward_planner(self, distance=distance, direction=direction)
@@ -654,16 +733,41 @@ class Control:
             self.forward.finished_signal.connect(self.revforward_judge)
             self.forward.start_forward()
 
-    def joint4_reverse(self):
-        if self.close_clampA_flag:
+    def joint4_reverse(self,step):
+        if self.reverse_joint4_flag:
             self.addLogs("夹爪A闭合结束")
-            self.close_clampA_flag = False
-            self.set_led_style(self.led3, not self.close_clampA_flag)
+            self.reverse_joint4_flag = False
+            if step == 1:
+                self.set_button_style(self.button_joint4_reverse_1, self.reverse_joint4_flag)
+                self.set_led_style(self.led6,not self.reverse_joint4_flag)
+            elif step == 2:
+                self.set_button_style(self.button_joint4_reverse_2, self.reverse_joint4_flag)
+                self.set_led_style(self.led16,not self.reverse_joint4_flag)
+            elif step == 3:
+                self.set_button_style(self.button_joint4_reverse_3, self.reverse_joint4_flag)
+                self.set_led_style(self.led26,not self.reverse_joint4_flag)
+            #self.set_led_style(self.led3, not self.reverse_joint4_flag)
         else:
-            self.close_clampA_flag = True
+            self.reverse_joint4_flag = True
             self.addLogs("夹爪A开始闭合")
-            self.set_button_style(self.button3, self.close_clampA_flag)
+            if step == 1:
+                self.set_button_style(self.button_joint4_reverse_1, self.reverse_joint4_flag)
+            elif step == 2:
+                self.set_button_style(self.button_joint4_reverse_2, self.reverse_joint4_flag)
+            elif step == 3:
+                self.set_button_style(self.button_joint4_reverse_3, self.reverse_joint4_flag)
+
             self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+
+    def log_position(self):
+        print("已经成功记录位置")
+        self.set_button_style(self.log_pos,True)
+        self.set_led_style(self.led27,True)
+
+    def mounting(self):
+        print("装配")
+        self.set_button_style(self.mounting4,True)
+        self.set_led_style(self.led31,True)
                     
     
     # 日志显示相关
