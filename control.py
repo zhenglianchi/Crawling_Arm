@@ -69,12 +69,12 @@ class Control:
             margin-top: 0px;
         """)
             self.addLogs("Twincat连接关闭")
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRz", 0, pyads.PLCTYPE_LREAL)
             self.tc3.stop_monitoring()
             self.tc3.variables={}
             self.tc3.close()
@@ -586,12 +586,12 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_servo_align3, self.open_servo_flag)
                 self.set_led_style(self.led21,not self.open_servo_flag)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRz", 0, pyads.PLCTYPE_LREAL)
         else:
             self.open_servo_flag = True
             self.addLogs("捕获流程开始")
@@ -602,6 +602,8 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_servo_align3, self.open_servo_flag)
 
+            self.tc3.write_by_name(f"crawl1.VisSer_Open", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"crawl1.signal", 1, pyads.PLCTYPE_LREAL)
             lambda_gain = np.array([0.6, 0.6, 0.6, 0.7, 0.7, 0.7])
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
@@ -624,12 +626,12 @@ class Control:
                 self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
                 self.set_led_style(self.led22,not self.open_forwardplanner_flag)
             #self.set_led_style(self.led3, not self.open_forwardplanner_flag)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRz", 0, pyads.PLCTYPE_LREAL)
         else:
             self.open_forwardplanner_flag = True
             self.addLogs("直线规划开始")
@@ -639,6 +641,7 @@ class Control:
                 self.set_button_style(self.button_linear_plan2, self.open_forwardplanner_flag)
             elif step == 3:
                 self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
+            self.tc3.write_by_name(f"crawl1.signal", 2, pyads.PLCTYPE_LREAL)
             distance = 0.2
             direction = 1
             self.forward = Forward_planner(self, distance=distance, direction=direction)
@@ -669,7 +672,7 @@ class Control:
                 self.set_button_style(self.button_close_clampA2, self.close_clampA_flag)
             elif step == 3:
                 self.set_button_style(self.button_close_clampA3, self.close_clampA_flag)
-            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.signal", 3, pyads.PLCTYPE_LREAL)
 
     def release_clampB(self,step):
         if self.release_clampB_flag:
@@ -694,7 +697,7 @@ class Control:
                 self.set_button_style(self.button_release_clampB2, self.release_clampB_flag)
             elif step == 3:
                 self.set_button_style(self.button_release_clampB3, self.release_clampB_flag)
-            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.signal", 5, pyads.PLCTYPE_LREAL)
 
     def reverse_linear(self,step):
         if self.open_reverseplanner_flag:
@@ -711,12 +714,12 @@ class Control:
                 self.set_button_style(self.button_reverse_linear_3, self.open_reverseplanner_flag)
                 self.set_led_style(self.led25,not self.open_reverseplanner_flag)
             #self.set_led_style(self.led3, not self.open_reverseplanner_flag)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonX", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonY", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", 0, pyads.PLCTYPE_LREAL)
-            self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonX", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonY", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonZ", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRx", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRy", 0, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.RepythonRz", 0, pyads.PLCTYPE_LREAL)
         else:
             self.open_reverseplanner_flag = True
             self.addLogs("直线规划开始")
@@ -732,6 +735,7 @@ class Control:
             self.forward.update_pose_signal.connect(self.write_delta)
             self.forward.finished_signal.connect(self.revforward_judge)
             self.forward.start_forward()
+            self.tc3.write_by_name(f"crawl1.signal", 6, pyads.PLCTYPE_LREAL)
 
     def joint4_reverse(self,step):
         if self.reverse_joint4_flag:
@@ -757,7 +761,7 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_joint4_reverse_3, self.reverse_joint4_flag)
 
-            self.tc3.write_by_name(f"GVL.signal", 3, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"crawl1.signal", 3, pyads.PLCTYPE_LREAL)
 
     def log_position(self):
         print("已经成功记录位置")
@@ -787,12 +791,12 @@ class Control:
             self.tc3.add_variable(f"GVL.axis[{i+1}].NcToPlc.ActPos", pyads.PLCTYPE_LREAL, self.value_changed)
             self.tc3.add_variable(f"GVL.axis[{i+1}].NcToPlc.ErrorCode", pyads.PLCTYPE_UDINT, self.value_changed)
 
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"SiJueSiFu.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
 
     # 定义回调函数
     def value_changed(self, name ,value):
@@ -829,6 +833,8 @@ class Control:
                 self.line_Ry.setText(str(round(value,3)))
             elif types == "ReaTwinRZ":
                 self.line_Rz.setText(str(round(value,3)))
+
+            
         
 
     def update_image(self, img_color):
@@ -841,12 +847,12 @@ class Control:
         self.VisionPictureRGB_2.setPixmap(QPixmap.fromImage(convert_to_qt_format))
 
     def write_delta(self, delta_world):
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"SiJueSiFu.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"crawl1.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
         
     def servo_judge(self, finished_flag = False):
         if finished_flag:
