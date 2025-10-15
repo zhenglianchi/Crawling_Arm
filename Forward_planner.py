@@ -53,6 +53,7 @@ class Forward_planner(QThread):
         super().__init__()
         self.ui = ui
         self._run_flag = None
+        self.video_thread = self.ui.thread
         self.distance = distance
         self.direction = direction
 

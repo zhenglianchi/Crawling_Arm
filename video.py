@@ -58,7 +58,7 @@ class VideoThread(QThread):
                     
                     self.Z = img_depth[int(center_point[1]), int(center_point[0])]/1000.0
                     # 提取检测框内的深度区域
-                    depth_roi = img_depth[average_y-1:average_y+2, average_y-1:average_y+2]
+                    depth_roi = img_depth[int(average_y-1):int(average_y+2), int(average_y-1):int(average_y+2)]
                     # 直接计算平均深度（包括 0），单位转换为米
                     self.center_z = np.mean(depth_roi) / 1000.0
                 else:

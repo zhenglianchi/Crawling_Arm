@@ -602,8 +602,8 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_servo_align3, self.open_servo_flag)
 
-            self.tc3.write_by_name(f"crawl1.VisSer_Open", True, pyads.PLCTYPE_BOOL)
-            self.tc3.write_by_name(f"crawl1.signal", 1, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.VisSer_Open", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"GVL.Signal", 1, pyads.PLCTYPE_INT)
             lambda_gain = np.array([0.6, 0.6, 0.6, 0.7, 0.7, 0.7])
             lambda_gain = np.diag(lambda_gain)
             self.servo = VisualServoThread(self, lambda_gain)
@@ -641,7 +641,7 @@ class Control:
                 self.set_button_style(self.button_linear_plan2, self.open_forwardplanner_flag)
             elif step == 3:
                 self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
-            self.tc3.write_by_name(f"crawl1.signal", 2, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.Signal", 2, pyads.PLCTYPE_INT)
             distance = 0.2
             direction = 1
             self.forward = Forward_planner(self, distance=distance, direction=direction)
@@ -672,7 +672,7 @@ class Control:
                 self.set_button_style(self.button_close_clampA2, self.close_clampA_flag)
             elif step == 3:
                 self.set_button_style(self.button_close_clampA3, self.close_clampA_flag)
-            self.tc3.write_by_name(f"crawl1.signal", 3, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.Signal", 3, pyads.PLCTYPE_INT)
 
     def release_clampB(self,step):
         if self.release_clampB_flag:
@@ -697,7 +697,7 @@ class Control:
                 self.set_button_style(self.button_release_clampB2, self.release_clampB_flag)
             elif step == 3:
                 self.set_button_style(self.button_release_clampB3, self.release_clampB_flag)
-            self.tc3.write_by_name(f"crawl1.signal", 5, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.Signal", 5, pyads.PLCTYPE_INT)
 
     def reverse_linear(self,step):
         if self.open_reverseplanner_flag:
@@ -735,7 +735,7 @@ class Control:
             self.forward.update_pose_signal.connect(self.write_delta)
             self.forward.finished_signal.connect(self.revforward_judge)
             self.forward.start_forward()
-            self.tc3.write_by_name(f"crawl1.signal", 6, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.Signal", 6, pyads.PLCTYPE_INT)
 
     def joint4_reverse(self,step):
         if self.reverse_joint4_flag:
@@ -761,7 +761,7 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_joint4_reverse_3, self.reverse_joint4_flag)
 
-            self.tc3.write_by_name(f"crawl1.signal", 3, pyads.PLCTYPE_LREAL)
+            self.tc3.write_by_name(f"GVL.Signal", 3, pyads.PLCTYPE_INT)
 
     def log_position(self):
         print("已经成功记录位置")
