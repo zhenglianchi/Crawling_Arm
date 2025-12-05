@@ -95,6 +95,12 @@ class Control:
                 self.tc3.eeposrx_signal.connect(self.value_changed)
                 self.tc3.eeposry_signal.connect(self.value_changed)
                 self.tc3.eeposrz_signal.connect(self.value_changed)
+                self.tc3.fx_signal.connect(self.value_changed)
+                self.tc3.fy_signal.connect(self.value_changed)
+                self.tc3.fz_signal.connect(self.value_changed)
+                self.tc3.tx_signal.connect(self.value_changed)
+                self.tc3.ty_signal.connect(self.value_changed)
+                self.tc3.tz_signal.connect(self.value_changed)
 
                 self.tc3.start_monitoring()
                 self.connect_led.setStyleSheet("""
@@ -849,6 +855,13 @@ class Control:
         self.tc3.add_variable(f"crawl1.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
 
+        self.tc3.add_variable(f"crawl1.fx", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.fy", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.fz", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.tx", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ty", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.tz", pyads.PLCTYPE_LREAL, self.value_changed)
+
     # 定义回调函数
     def value_changed(self, name, value):
         pattern = r'\d+'
@@ -884,6 +897,19 @@ class Control:
                 self.line_Ry.setText(str(round(value, 3)))
             elif types == "ReaTwinRZ":
                 self.line_Rz.setText(str(round(value, 3)))
+                
+            elif types == "fx":
+                self.line_Fx.setText(str(round(value, 3)))
+            elif types == "fy":
+                self.line_Fy.setText(str(round(value, 3)))
+            elif types == "fz":
+                self.line_Fz.setText(str(round(value, 3)))
+            elif types == "tx":
+                self.line_Tx.setText(str(round(value, 3)))
+            elif types == "ty":
+                self.line_Ty.setText(str(round(value, 3)))
+            elif types == "tz":
+                self.line_Tz.setText(str(round(value, 3)))
 
     def update_image(self, img_color):
         # Update the image_label with a new image

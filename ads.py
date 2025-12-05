@@ -17,6 +17,13 @@ class TwinCat3_ADSserver(QThread):
     eeposry_signal = pyqtSignal(str, float)
     eeposrz_signal = pyqtSignal(str, float)
 
+    fx_signal = pyqtSignal(str, float)
+    fy_signal = pyqtSignal(str, float)
+    fz_signal = pyqtSignal(str, float)
+    tx_signal = pyqtSignal(str, float)
+    ty_signal = pyqtSignal(str, float)
+    tz_signal = pyqtSignal(str, float)
+
     def __init__(self, ip="192.168.217.176.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
         '''
         type ip: str
@@ -91,6 +98,18 @@ class TwinCat3_ADSserver(QThread):
                         self.eeposry_signal.emit(name, value)
                     elif types == "ReaTwinRZ":
                         self.eeposrz_signal.emit(name, value)
+                    elif types == "fx":
+                        self.fx_signal.emit(name, value)
+                    elif types == "fy":
+                        self.fy_signal.emit(name, value)
+                    elif types == "fz":
+                        self.fz_signal.emit(name, value)
+                    elif types == "tx":
+                        self.tx_signal.emit(name, value)
+                    elif types == "ty":
+                        self.ty_signal.emit(name, value)
+                    elif types == "tz":
+                        self.tz_signal.emit(name, value)
                     else:
                         print("读取到不存在的变量")
                 
