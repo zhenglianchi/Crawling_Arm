@@ -77,12 +77,11 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.button_servo_align3.clicked.connect(partial(self.control.servo_align,3))
         self.button_linear_plan3.clicked.connect(partial(self.control.linear_plan,3))
         self.button_close_clampA3.clicked.connect(partial(self.control.close_clampA,3))
-        self.button_reverse_linear_3.clicked.connect(partial(self.control.reverse_linear,3))
         self.button_joint4_reverse_3.clicked.connect(partial(self.control.joint4_reverse,3))
-        self.button_release_clampB3.clicked.connect(partial(self.control.release_clampB,3))
         self.log_pos.clicked.connect(self.control.log_position)
 
         self.mounting4.clicked.connect(self.control.mounting)
+        self.button_linear_plan4.clicked.connect(partial(self.control.linear_plan,4))
 
     # 日志显示
     def addLogs(self, *args, split=''):

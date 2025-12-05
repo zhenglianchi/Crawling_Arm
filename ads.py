@@ -17,12 +17,26 @@ class TwinCat3_ADSserver(QThread):
     eeposry_signal = pyqtSignal(str, float)
     eeposrz_signal = pyqtSignal(str, float)
 
+<<<<<<< HEAD
     fx_signal = pyqtSignal(str, float)
     fy_signal = pyqtSignal(str, float)
     fz_signal = pyqtSignal(str, float)
     tx_signal = pyqtSignal(str, float)
     ty_signal = pyqtSignal(str, float)
     tz_signal = pyqtSignal(str, float)
+=======
+    '''close_A1 = pyqtSignal(str,bool)
+    release_B1 = pyqtSignal(str,bool)
+    reverse_joint41 = pyqtSignal(str,bool)
+
+    close_A2 = pyqtSignal(str,bool)
+    release_B2 = pyqtSignal(str,bool)
+    reverse_joint42 = pyqtSignal(str,bool)
+    
+    close_A3 = pyqtSignal(str,bool)
+    release_B3 = pyqtSignal(str,bool)
+    reverse_joint43 = pyqtSignal(str,bool)'''
+>>>>>>> 51b7c4100b798280786495eff909cea46b9e89dd
 
     def __init__(self, ip="192.168.217.176.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
         '''

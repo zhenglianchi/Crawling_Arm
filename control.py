@@ -95,12 +95,24 @@ class Control:
                 self.tc3.eeposrx_signal.connect(self.value_changed)
                 self.tc3.eeposry_signal.connect(self.value_changed)
                 self.tc3.eeposrz_signal.connect(self.value_changed)
+<<<<<<< HEAD
                 self.tc3.fx_signal.connect(self.value_changed)
                 self.tc3.fy_signal.connect(self.value_changed)
                 self.tc3.fz_signal.connect(self.value_changed)
                 self.tc3.tx_signal.connect(self.value_changed)
                 self.tc3.ty_signal.connect(self.value_changed)
                 self.tc3.tz_signal.connect(self.value_changed)
+=======
+                '''self.tc3.close_A1.connect(self.value_changed)
+                self.tc3.release_B1.connect(self.value_changed)
+                self.tc3.reverse_joint41.connect(self.value_changed)
+                self.tc3.close_A2.connect(self.value_changed)
+                self.tc3.release_B2.connect(self.value_changed)
+                self.tc3.reverse_joint42.connect(self.value_changed)
+                self.tc3.close_A3.connect(self.value_changed)
+                self.tc3.release_B3.connect(self.value_changed)
+                self.tc3.reverse_joint43.connect(self.value_changed)'''
+>>>>>>> 51b7c4100b798280786495eff909cea46b9e89dd
 
                 self.tc3.start_monitoring()
                 self.connect_led.setStyleSheet("""
@@ -635,6 +647,9 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
                 self.set_led_style(self.led22, not self.open_forwardplanner_flag)
+            elif step == 4:
+                self.set_button_style(self.button_linear_plan4, self.open_forwardplanner_flag)
+                self.set_led_style(self.led32, not self.open_forwardplanner_flag)
             # self.set_led_style(self.led3, not self.open_forwardplanner_flag)
             self.tc3.write_by_name(f"crawl1.RepythonX", 0, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"crawl1.RepythonY", 0, pyads.PLCTYPE_LREAL)
@@ -653,6 +668,9 @@ class Control:
                 self.tc3.write_by_name(f"GVL.Signal", 10, pyads.PLCTYPE_INT)
             elif step == 3:
                 self.set_button_style(self.button_linear_plan3, self.open_forwardplanner_flag)
+                self.tc3.write_by_name(f"GVL.Signal", 18, pyads.PLCTYPE_INT)
+            elif step == 4:
+                self.set_button_style(self.button_linear_plan4, self.open_forwardplanner_flag)
                 self.tc3.write_by_name(f"GVL.Signal", 18, pyads.PLCTYPE_INT)
 
             distance = 0.2
@@ -675,7 +693,6 @@ class Control:
             elif step == 3:
                 self.set_button_style(self.button_close_clampA3, self.close_clampA_flag)
                 self.set_led_style(self.led23, not self.close_clampA_flag)
-            # self.set_led_style(self.led3, not self.close_clampA_flag)
         else:
             self.close_clampA_flag = True
             self.addLogs("夹爪A开始闭合")
@@ -854,6 +871,9 @@ class Control:
         self.tc3.add_variable(f"crawl1.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        
+        # 这里连接是否完成的变量
+        #self.tc3.add_variable(f"GVL.CangMen_State_Close", pyads.PLCTYPE_BOOL, self.value_changed)
 
         self.tc3.add_variable(f"crawl1.fx", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.fy", pyads.PLCTYPE_LREAL, self.value_changed)
@@ -910,6 +930,11 @@ class Control:
                 self.line_Ty.setText(str(round(value, 3)))
             elif types == "tz":
                 self.line_Tz.setText(str(round(value, 3)))
+
+            '''elif types == "CangMen_State_Close":
+                if value and self.close_clampA_flag:
+                    self.close_clampA()'''
+
 
     def update_image(self, img_color):
         # Update the image_label with a new image

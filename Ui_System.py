@@ -833,11 +833,9 @@ class Ui_MainWindow(object):
         self.button_servo_align3 = QtWidgets.QPushButton(self.widget_24)
         self.button_linear_plan3 = QtWidgets.QPushButton(self.widget_24)
         self.button_close_clampA3 = QtWidgets.QPushButton(self.widget_24)
-        self.button_release_clampB3 = QtWidgets.QPushButton(self.widget_24)
-        self.button_reverse_linear_3 = QtWidgets.QPushButton(self.widget_24)
         self.button_joint4_reverse_3 = QtWidgets.QPushButton(self.widget_24)
         self.log_pos = QtWidgets.QPushButton(self.widget_24)
-        for i,btn in enumerate([self.button_servo_align3, self.button_linear_plan3, self.button_close_clampA3, self.button_release_clampB3,self.button_reverse_linear_3,self.button_joint4_reverse_3,self.log_pos]):
+        for i,btn in enumerate([self.log_pos,self.button_joint4_reverse_3,self.button_servo_align3, self.button_linear_plan3, self.button_close_clampA3]):
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
                 "font: 15pt \"Adobe 黑体 Std R\";\n"
@@ -881,13 +879,11 @@ class Ui_MainWindow(object):
                 self.verticalLayout_22.setStretch(i,1)
                 setattr(self,f"led{i+21}",label)
 
+        self.log_pos.setObjectName("log_pos")
+        self.button_joint4_reverse_3.setObjectName("button_joint4_reverse_3")
         self.button_servo_align3.setObjectName("button_servo_align3")
         self.button_linear_plan3.setObjectName("button_linear_plan3")
         self.button_close_clampA3.setObjectName("button_close_clampA3")
-        self.button_release_clampB3.setObjectName("button_release_clampB3")
-        self.button_reverse_linear_3.setObjectName("button_reverse_linear_3")
-        self.button_joint4_reverse_3.setObjectName("button_joint4_reverse_3")
-        self.log_pos.setObjectName("log_pos")
 
         #self.verticalLayout_12.addWidget(self.widget_24)
         self.widget_28 = QtWidgets.QWidget(self.widget_14)
@@ -938,7 +934,8 @@ class Ui_MainWindow(object):
         #self.horizontalLayout_26.addItem(spacerItem19)
 
         self.mounting4 = QtWidgets.QPushButton(self.widget_28)
-        for btn in [self.mounting4]:
+        self.button_linear_plan4 = QtWidgets.QPushButton(self.widget_28)
+        for btn in [self.mounting4,self.button_linear_plan4]:
                 btn.setStyleSheet("background-color: #f4f4f4;\n"
                 "color: black;\n"
                 "font: 15pt \"Adobe 黑体 Std R\";\n"
@@ -980,9 +977,10 @@ class Ui_MainWindow(object):
 
                 self.verticalLayout_26.addLayout(h_layout)
                 self.verticalLayout_26.setStretch(i,1)
-                setattr(self,f"led31",label)
+                setattr(self,f"led{i+31}",label)
 
         self.mounting4.setObjectName("mounting4")
+        self.button_linear_plan4.setObjectName("button_linear_plan4")
 
         self.button1 = QtWidgets.QPushButton(self.widget_14)
         self.button1.setMinimumSize(QtCore.QSize(180, 70))
@@ -1504,25 +1502,24 @@ class Ui_MainWindow(object):
         self.button_linear_plan1.setText(_translate("MainWindow", "直线规划"))
         self.button_close_clampA1.setText(_translate("MainWindow", "闭合末端夹爪"))
         self.button_release_clampB1.setText(_translate("MainWindow", "松开基座夹爪"))
-        self.button_reverse_linear_1.setText(_translate("MainWindow", "反向规划"))
+        self.button_reverse_linear_1.setText(_translate("MainWindow", "反向直线规划"))
         self.button_joint4_reverse_1.setText(_translate("MainWindow", "反转关节4"))
 
         self.button_servo_align2.setText(_translate("MainWindow", "伺服对齐"))
         self.button_linear_plan2.setText(_translate("MainWindow", "直线规划"))
         self.button_close_clampA2.setText(_translate("MainWindow", "闭合末端夹爪"))
         self.button_release_clampB2.setText(_translate("MainWindow", "松开基座夹爪"))
-        self.button_reverse_linear_2.setText(_translate("MainWindow", "反向规划"))
+        self.button_reverse_linear_2.setText(_translate("MainWindow", "反向直线规划"))
         self.button_joint4_reverse_2.setText(_translate("MainWindow", "反转关节4"))
 
+        self.log_pos.setText(_translate("MainWindow", "记录位置"))
+        self.button_joint4_reverse_3.setText(_translate("MainWindow", "反转关节4"))
         self.button_servo_align3.setText(_translate("MainWindow", "伺服对齐"))
         self.button_linear_plan3.setText(_translate("MainWindow", "直线规划"))
         self.button_close_clampA3.setText(_translate("MainWindow", "闭合末端夹爪"))
-        self.button_release_clampB3.setText(_translate("MainWindow", "松开基座夹爪"))
-        self.button_reverse_linear_3.setText(_translate("MainWindow", "反向规划"))
-        self.button_joint4_reverse_3.setText(_translate("MainWindow", "反转关节4"))
-        self.log_pos.setText(_translate("MainWindow", "记录位置"))
 
-        self.mounting4.setText(_translate("MainWindow", "装配"))
+        self.mounting4.setText(_translate("MainWindow", "移动到装配位置正前方"))
+        self.button_linear_plan4.setText(_translate("MainWindow", "直线规划"))
 
         self.groupBox_4.setTitle(_translate("MainWindow", "日志"))
         self.groupBox_3.setTitle(_translate("MainWindow", "数据监控"))
