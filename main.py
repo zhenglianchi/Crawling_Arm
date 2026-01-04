@@ -16,14 +16,16 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         self.logText.setVisible(True)
         self.logText.setReadOnly(True)
         self.box_motor.addItem("请选择电机")
-        self.box_motor.addItems(["关节电机:a1","关节电机:a2","关节电机:a3","关节电机:a4","关节电机:a5","关节电机:a6","关节电机:a7",
-                                "手爪电机:b1","手爪电机:b2"])
+        self.box_motor.addItems(["手爪电机:b1", "关节电机:a1","关节电机:a2","关节电机:a3","关节电机:a4","关节电机:a5",
+                                 "关节电机:a6","关节电机:a7","手爪电机:b2"])
         
         for i in range(1,10):
-            if i<=7:
-                index=f"a{i}"
+            if i == 1:
+                index = f"b1"
+            elif i == 9:
+                index = f"b2"
             else:
-                index=f"b{i-7}"
+                index=f"a{i-1}"
             item_data = QTableWidgetItem(index)
             self.table.setItem(i-1,0,item_data)
 
@@ -49,8 +51,7 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
         # 按钮函数绑定
         self.button_connect.clicked.connect(self.control.open_connect)
         self.button_motor.clicked.connect(self.control.open_motor)
-        self.button_cameraA.clicked.connect(self.control.open_cameraA)
-        self.button_cameraB.clicked.connect(self.control.open_cameraB)
+        self.button_switch.clicked.connect(self.control.switch_base)
         self.button_start.clicked.connect(self.control.open_start)
         self.button_forward.clicked.connect(self.control.open_forward)
         self.button_reverse.clicked.connect(self.control.open_reverse)

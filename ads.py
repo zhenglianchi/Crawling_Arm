@@ -17,14 +17,21 @@ class TwinCat3_ADSserver(QThread):
     eeposry_signal = pyqtSignal(str, float)
     eeposrz_signal = pyqtSignal(str, float)
 
-<<<<<<< HEAD
     fx_signal = pyqtSignal(str, float)
     fy_signal = pyqtSignal(str, float)
     fz_signal = pyqtSignal(str, float)
     tx_signal = pyqtSignal(str, float)
     ty_signal = pyqtSignal(str, float)
     tz_signal = pyqtSignal(str, float)
-=======
+
+    output3 = pyqtSignal(str, bool)
+    output4 = pyqtSignal(str, bool)
+    output5 = pyqtSignal(str, bool)
+    output6 = pyqtSignal(str, bool)
+    output7 = pyqtSignal(str, bool)
+    output8 = pyqtSignal(str, bool)
+    output9 = pyqtSignal(str, bool)
+
     '''close_A1 = pyqtSignal(str,bool)
     release_B1 = pyqtSignal(str,bool)
     reverse_joint41 = pyqtSignal(str,bool)
@@ -36,13 +43,14 @@ class TwinCat3_ADSserver(QThread):
     close_A3 = pyqtSignal(str,bool)
     release_B3 = pyqtSignal(str,bool)
     reverse_joint43 = pyqtSignal(str,bool)'''
->>>>>>> 51b7c4100b798280786495eff909cea46b9e89dd
 
-    def __init__(self, ip="192.168.217.176.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
+
+    def __init__(self, ip="5.117.71.196.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
         '''
         type ip: str
         type amsNetIdTarget: pyads.PORT_xxx
         5.108.90.221.1.1
+        5.117.71.196.1.1
         127.0.0.1.1.1
         '''
         super().__init__()
@@ -112,18 +120,34 @@ class TwinCat3_ADSserver(QThread):
                         self.eeposry_signal.emit(name, value)
                     elif types == "ReaTwinRZ":
                         self.eeposrz_signal.emit(name, value)
-                    elif types == "fx":
+                    elif types == "FX1" or types == "FX2":
                         self.fx_signal.emit(name, value)
-                    elif types == "fy":
+                    elif types == "FY1" or types == "FY2":
                         self.fy_signal.emit(name, value)
-                    elif types == "fz":
+                    elif types == "FZ1" or types == "FZ2":
                         self.fz_signal.emit(name, value)
-                    elif types == "tx":
+                    elif types == "TX1" or types == "TX2":
                         self.tx_signal.emit(name, value)
-                    elif types == "ty":
+                    elif types == "TY1" or types == "TY2":
                         self.ty_signal.emit(name, value)
-                    elif types == "tz":
+                    elif types == "TZ1" or types == "TZ2":
                         self.tz_signal.emit(name, value)
+                    
+                    elif types == "output3":
+                        self.output3.emit(name, value)
+                    elif types == "output4":
+                        self.output4.emit(name, value)
+                    elif types == "output5":
+                        self.output5.emit(name, value)
+                    elif types == "output6":
+                        self.output6.emit(name, value)
+                    elif types == "output7":
+                        self.output7.emit(name, value)
+                    elif types == "output8":
+                        self.output8.emit(name, value)
+                    elif types == "output9":
+                        self.output9.emit(name, value)
+
                     else:
                         print("读取到不存在的变量")
                 

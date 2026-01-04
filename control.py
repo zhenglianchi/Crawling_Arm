@@ -42,6 +42,8 @@ class Control:
         self.open_cameraA_flag = False
         self.open_cameraB_flag = False
 
+        self.switch_on = True
+
         self.thread = None
         # 初始化连接
         self.tc3 = TwinCat3_ADSserver()
@@ -95,14 +97,22 @@ class Control:
                 self.tc3.eeposrx_signal.connect(self.value_changed)
                 self.tc3.eeposry_signal.connect(self.value_changed)
                 self.tc3.eeposrz_signal.connect(self.value_changed)
-<<<<<<< HEAD
+
                 self.tc3.fx_signal.connect(self.value_changed)
                 self.tc3.fy_signal.connect(self.value_changed)
                 self.tc3.fz_signal.connect(self.value_changed)
                 self.tc3.tx_signal.connect(self.value_changed)
                 self.tc3.ty_signal.connect(self.value_changed)
                 self.tc3.tz_signal.connect(self.value_changed)
-=======
+
+                self.tc3.output3.connect(self.value_changed)
+                self.tc3.output4.connect(self.value_changed)
+                self.tc3.output5.connect(self.value_changed)
+                self.tc3.output6.connect(self.value_changed)
+                self.tc3.output7.connect(self.value_changed)
+                self.tc3.output8.connect(self.value_changed)
+                self.tc3.output9.connect(self.value_changed)
+
                 '''self.tc3.close_A1.connect(self.value_changed)
                 self.tc3.release_B1.connect(self.value_changed)
                 self.tc3.reverse_joint41.connect(self.value_changed)
@@ -112,7 +122,7 @@ class Control:
                 self.tc3.close_A3.connect(self.value_changed)
                 self.tc3.release_B3.connect(self.value_changed)
                 self.tc3.reverse_joint43.connect(self.value_changed)'''
->>>>>>> 51b7c4100b798280786495eff909cea46b9e89dd
+
 
                 self.tc3.start_monitoring()
                 self.connect_led.setStyleSheet("""
@@ -134,94 +144,72 @@ class Control:
             except Exception as e:
                 self.addLogs(str(e))
 
-    # #   -------------------------------相机切换-----------------------------------
+
+    def switch_base(self):
+        if self.switch_on:
+            self.tc3.write_by_name(f"GVL.output3", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"GVL.output7", True, pyads.PLCTYPE_BOOL)
+            time.sleep(3)
+            self.tc3.write_by_name(f"GVL.output7", False, pyads.PLCTYPE_BOOL)
+            self.open_cameraA()
+        else:
+            self.tc3.write_by_name(f"GVL.output4", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"GVL.output8", True, pyads.PLCTYPE_BOOL)
+            time.sleep(3)
+            self.tc3.write_by_name(f"GVL.output8", False, pyads.PLCTYPE_BOOL)
+            self.open_cameraB()
+
+
     def open_cameraA(self):
         if self.open_cameraA_flag:
             self.open_cameraA_flag = False
-            self.button_cameraA.setText("开启A侧相机及六维力")
-            self.button_cameraA.setStyleSheet("""
-                background-color: #f3f3f3;
-                color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
-            """)
             if self.thread:
                 self.thread.stop_camera()
+                self.thread = None
+            self.del_force1()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
             self.addLogs("A侧相机和六维力关闭")
         else:
+            self.open_cameraA_flag = True
             self.addLogs("A侧相机和六维力开启中")
             try:
                 # 如果 B 已开启，先关掉 B
                 if self.open_cameraB_flag:
-                    self.open_cameraB_flag = False
-                    self.button_cameraB.setText("开启B侧相机及六维力")
-                    self.button_cameraB.setStyleSheet("""
-                    background-color: #f3f3f3;
-                    color: black;
-                    padding: 5px 10px;
-                    border-left: 0px;
-                    border-top: 0px;
-                    border-right: 2px solid #a3a3a3;
-                    border-bottom: 2px solid #a3a3a3;
-                    margin-top: 0px;
-                """)
-                    if self.thread:
-                        self.thread.stop_camera()
+                    self.open_cameraB()
 
                 self.thread = VideoThread(serial=self.cameraA_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
                 self.thread.start_camera()
+                self.add_force1()
             except Exception as e:
                 self.addLogs(str(e))
+
 
     def open_cameraB(self):
         if self.open_cameraB_flag:
             self.open_cameraB_flag = False
-            self.button_cameraB.setText("开启B侧相机及六维力")
-            self.button_cameraB.setStyleSheet("""
-                background-color: #f3f3f3;
-                color: black;
-                padding: 5px 10px;
-                border-left: 0px;
-                border-top: 0px;
-                border-right: 2px solid #a3a3a3;
-                border-bottom: 2px solid #a3a3a3;
-                margin-top: 0px;
-            """)
             if self.thread:
                 self.thread.stop_camera()
+                self.thread = None
+            self.del_force2()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
             self.addLogs("B侧相机和六维力关闭")
         else:
+            self.open_cameraB_flag = True
             self.addLogs("B侧相机和六维力开启中")
             try:
                 # 如果 A 已开启，先关掉 A
                 if self.open_cameraA_flag:
-                    self.open_cameraA_flag = False
-                    self.button_cameraA.setText("开启A侧相机及六维力")
-                    self.button_cameraA.setStyleSheet("""
-                    background-color: #f3f3f3;
-                    color: black;
-                    padding: 5px 10px;
-                    border-left: 0px;
-                    border-top: 0px;
-                    border-right: 2px solid #a3a3a3;
-                    border-bottom: 2px solid #a3a3a3;
-                    margin-top: 0px;
-                """)
-                    if self.thread:
-                        self.thread.stop_camera()
+                    self.open_cameraA()
 
                 self.thread = VideoThread(serial=self.cameraB_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
                 self.thread.start_camera()
+                self.add_force2()
             except Exception as e:
                 self.addLogs(str(e))
+
+
 
     def open_motor(self):
         if self.open_motor_flag:
@@ -464,7 +452,7 @@ class Control:
             self.open_reset_flag = True
             self.button_reset.setText("复位")
             self.button_reset.setStyleSheet("""
-            background-color: gray;
+            background-color: #f3f3f3;
             color: black;
             padding: 5px 10px;
             border-left: 0px;
@@ -472,7 +460,7 @@ class Control:
             border-right: 2px solid #a3a3a3;
             border-bottom: 2px solid #a3a3a3;
             margin-top: 0px;
-        """)
+            """)
             self.addLogs("电机复位")
             select_axis = self.box_motor.currentIndex()
         self.tc3.write_by_name(f"Single.reset_flag[{select_axis}]", True, pyads.PLCTYPE_BOOL)
@@ -486,7 +474,7 @@ class Control:
             self.open_zero_flag = True
             self.button_zero.setText("回零")
             self.button_zero.setStyleSheet("""
-            background-color: gray;
+            background-color: #f3f3f3;
             color: black;
             padding: 5px 10px;
             border-left: 0px;
@@ -494,7 +482,7 @@ class Control:
             border-right: 2px solid #a3a3a3;
             border-bottom: 2px solid #a3a3a3;
             margin-top: 0px;
-        """)
+            """)
             self.addLogs("电机回零")
             select_axis = self.box_motor.currentIndex()
         self.tc3.write_by_name(f"Single.home_flag[{select_axis}]", True, pyads.PLCTYPE_BOOL)
@@ -528,8 +516,8 @@ class Control:
                     self.addLogs("位置范围错误,请输入-180到180之间的值")
                     return
 
-                if speed < -30 or speed > 30:
-                    self.addLogs("速度范围错误,请输入0到15之间的值")
+                if speed < -5 or speed > 5:
+                    self.addLogs("速度范围错误,请输入0到5之间的值")
                     return
 
             except ValueError:
@@ -544,7 +532,7 @@ class Control:
             self.tc3.write_by_name(f"Single.abs_Velocity[{select_axis}]", setvelo, pyads.PLCTYPE_LREAL)
             self.tc3.write_by_name(f"Single.abs_flag[{select_axis}]", True, pyads.PLCTYPE_BOOL)
             self.button_move.setStyleSheet("""
-            background-color: gray;
+            background-color: #f3f3f3;
             color: black;
             padding: 5px 10px;
             border-left: 0px;
@@ -552,7 +540,7 @@ class Control:
             border-right: 2px solid #a3a3a3;
             border-bottom: 2px solid #a3a3a3;
             margin-top: 0px;
-        """)
+            """)
             self.addLogs(f"电机以{speed_text}m/s速度移动至({position_text})")
             self.set_button_style(self.button_move, False)
 
@@ -864,77 +852,105 @@ class Control:
             self.tc3.add_variable(f"GVL.axis[{i + 1}].NcToPlc.ActVelo", pyads.PLCTYPE_LREAL, self.value_changed)
             self.tc3.add_variable(f"GVL.axis[{i + 1}].NcToPlc.ActPos", pyads.PLCTYPE_LREAL, self.value_changed)
             self.tc3.add_variable(f"GVL.axis[{i + 1}].NcToPlc.ErrorCode", pyads.PLCTYPE_UDINT, self.value_changed)
+        
+        for i in range(3,10):
+            self.tc3.add_variable(f"GVL.output[{i}]", pyads.PLCTYPE_BOOL, self.value_changed)
 
-        self.tc3.add_variable(f"crawl1.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
+        '''self.tc3.add_variable(f"crawl1.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)'''
         
         # 这里连接是否完成的变量
         #self.tc3.add_variable(f"GVL.CangMen_State_Close", pyads.PLCTYPE_BOOL, self.value_changed)
 
-        self.tc3.add_variable(f"crawl1.fx", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.fy", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.fz", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.tx", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ty", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.tz", pyads.PLCTYPE_LREAL, self.value_changed)
 
     # 定义回调函数
     def value_changed(self, name, value):
         pattern = r'\d+'
         types = name.split(".")[-1]
-        try:
-            row = int(re.findall(pattern, name)[0])
-            if types == "Moving":
-                if float(self.table.item(row - 1, 2).text()) == 0:
-                    astr = "停止状态"
-                else:
-                    astr = "运行状态"
-                item_data = QtWidgets.QTableWidgetItem(astr)
-                self.table.setItem(row - 1, 1, item_data)
-            elif types == "ActVelo":
-                item_data = QtWidgets.QTableWidgetItem(str(round(value, 3)))
-                self.table.setItem(row - 1, 2, item_data)
-            elif types == "ActPos":
-                item_data = QtWidgets.QTableWidgetItem(str(round(value, 3)))
-                self.table.setItem(row - 1, 3, item_data)
-            elif types == "ErrorCode":
-                item_data = QtWidgets.QTableWidgetItem(str(value))
-                self.table.setItem(row - 1, 4, item_data)
-        except:
-            if types == "ReaTwinX":
-                self.line_x.setText(str(round(value, 3)))
-            elif types == "ReaTwinY":
-                self.line_y.setText(str(round(value, 3)))
-            elif types == "ReaTwinZ":
-                self.line_z.setText(str(round(value, 3)))
-            elif types == "ReaTwinRX":
-                self.line_Rx.setText(str(round(value, 3)))
-            elif types == "ReaTwinRY":
-                self.line_Ry.setText(str(round(value, 3)))
-            elif types == "ReaTwinRZ":
-                self.line_Rz.setText(str(round(value, 3)))
-                
-            elif types == "fx":
-                self.line_Fx.setText(str(round(value, 3)))
-            elif types == "fy":
-                self.line_Fy.setText(str(round(value, 3)))
-            elif types == "fz":
-                self.line_Fz.setText(str(round(value, 3)))
-            elif types == "tx":
-                self.line_Tx.setText(str(round(value, 3)))
-            elif types == "ty":
-                self.line_Ty.setText(str(round(value, 3)))
-            elif types == "tz":
-                self.line_Tz.setText(str(round(value, 3)))
 
-            '''elif types == "CangMen_State_Close":
-                if value and self.close_clampA_flag:
-                    self.close_clampA()'''
+        row = int(re.findall(pattern, name)[0])
+        if types == "Moving":
+            if float(self.table.item(row - 1, 2).text()) == 0:
+                astr = "停止状态"
+            else:
+                astr = "运行状态"
+            item_data = QtWidgets.QTableWidgetItem(astr)
+            self.table.setItem(row - 1, 1, item_data)
+        elif types == "ActVelo":
+            item_data = QtWidgets.QTableWidgetItem(str(round(value, 3)))
+            self.table.setItem(row - 1, 2, item_data)
+        elif types == "ActPos":
+            item_data = QtWidgets.QTableWidgetItem(str(round(value, 3)))
+            self.table.setItem(row - 1, 3, item_data)
+        elif types == "ErrorCode":
+            item_data = QtWidgets.QTableWidgetItem(str(value))
+            self.table.setItem(row - 1, 4, item_data)
 
+        '''if types == "ReaTwinX":
+            self.line_x.setText(str(round(value, 3)))
+        elif types == "ReaTwinY":
+            self.line_y.setText(str(round(value, 3)))
+        elif types == "ReaTwinZ":
+            self.line_z.setText(str(round(value, 3)))
+        elif types == "ReaTwinRX":
+            self.line_Rx.setText(str(round(value, 3)))
+        elif types == "ReaTwinRY":
+            self.line_Ry.setText(str(round(value, 3)))
+        elif types == "ReaTwinRZ":
+            self.line_Rz.setText(str(round(value, 3)))'''
+            
+        if types == "FX":
+            self.line_Fx.setText(str(round(value, 3)))
+        elif types == "FY":
+            self.line_Fy.setText(str(round(value, 3)))
+        elif types == "FZ":
+            self.line_Fz.setText(str(round(value, 3)))
+        elif types == "TX":
+            self.line_Tx.setText(str(round(value, 3)))
+        elif types == "TY":
+            self.line_Ty.setText(str(round(value, 3)))
+        elif types == "TZ":
+            self.line_Tz.setText(str(round(value, 3)))
+
+        '''elif types == "CangMen_State_Close":
+            if value and self.close_clampA_flag:
+                self.close_clampA()'''
+
+        if types == "output3":
+            self.output_led(self.output_led3,value)
+        elif types == "output4":
+            self.output_led(self.output_led4,value)
+        elif types == "output5":
+            self.output_led(self.output_led5,value)
+        elif types == "output6":
+            self.output_led(self.output_led6,value)
+        elif types == "output7":
+            self.output_led(self.output_led7,value)
+        elif types == "output8":
+            self.output_led(self.output_led8,value)
+        elif types == "output9":
+            self.output_led(self.output_led9,value)
+
+            
+    def output_led(self,led,flag):
+        if flag:
+            led.setStyleSheet("""
+                background-color: rgb(88, 214, 92);
+                border-radius: 10px; 
+                border: 1px solid gray;
+                margin-top: 0px;
+                """)
+        else:
+            led.setStyleSheet("""
+                background-color: red;
+                border-radius: 10px; 
+                border: 1px solid gray;
+                margin-top: 0px;
+            """)
 
     def update_image(self, img_color):
         # Update the image_label with a new image
@@ -964,3 +980,35 @@ class Control:
     def revforward_judge(self, finished_flag=False):
         if finished_flag:
             self.reverse_linear()
+
+    def add_force1(self):
+        self.tc3.add_variable(f"MAIN.FX1", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.FY1", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.FZ1", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TX1", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TY1", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TZ1", pyads.PLCTYPE_REAL, self.value_changed)
+
+    def add_force2(self):
+        self.tc3.add_variable(f"MAIN.FX2", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.FY2", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.FZ2", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TX2", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TY2", pyads.PLCTYPE_REAL, self.value_changed)
+        self.tc3.add_variable(f"MAIN.TZ2", pyads.PLCTYPE_REAL, self.value_changed)
+
+    def del_force1(self):
+        self.tc3.remove_variable("MAIN.FX1")
+        self.tc3.remove_variable("MAIN.FY1")
+        self.tc3.remove_variable("MAIN.FZ1")
+        self.tc3.remove_variable("MAIN.TX1")
+        self.tc3.remove_variable("MAIN.TY1")
+        self.tc3.remove_variable("MAIN.TZ1")
+
+    def del_force2(self):
+        self.tc3.remove_variable("MAIN.FX2")
+        self.tc3.remove_variable("MAIN.FY2")
+        self.tc3.remove_variable("MAIN.FZ2")
+        self.tc3.remove_variable("MAIN.TX2")
+        self.tc3.remove_variable("MAIN.TY2")
+        self.tc3.remove_variable("MAIN.TZ2")

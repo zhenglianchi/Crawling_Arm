@@ -195,14 +195,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.button_motor)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
-        self.button_cameraA = QtWidgets.QPushButton(self.widget_2)
+        self.button_switch = QtWidgets.QPushButton(self.widget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.button_cameraA.sizePolicy().hasHeightForWidth())
-        self.button_cameraA.setSizePolicy(sizePolicy)
-        self.button_cameraA.setMinimumSize(QtCore.QSize(240, 0))
-        self.button_cameraA.setStyleSheet("background-color: #f4f4f4;\n"
+        sizePolicy.setHeightForWidth(self.button_switch.sizePolicy().hasHeightForWidth())
+        self.button_switch.setSizePolicy(sizePolicy)
+        self.button_switch.setMinimumSize(QtCore.QSize(240, 0))
+        self.button_switch.setStyleSheet("background-color: #f4f4f4;\n"
 "color: black;\n"
 "   \n"
 "padding: 5px 10px;\n"
@@ -212,29 +212,40 @@ class Ui_MainWindow(object):
 " border-right: 2px solid #a3a3a3;  /* 右边边框 */\n"
 "    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
 "margin-top: 0px;")
-        self.button_cameraA.setObjectName("button_cameraA")
-        self.horizontalLayout_3.addWidget(self.button_cameraA)
+        self.button_switch.setObjectName("button_switch")
+        self.horizontalLayout_3.addWidget(self.button_switch)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
-        self.button_cameraB = QtWidgets.QPushButton(self.widget_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.button_cameraB.sizePolicy().hasHeightForWidth())
-        self.button_cameraB.setSizePolicy(sizePolicy)
-        self.button_cameraB.setMinimumSize(QtCore.QSize(240, 0))
-        self.button_cameraB.setStyleSheet("background-color: #f4f4f4;\n"
-"color: black;\n"
-"   \n"
-"padding: 5px 10px;\n"
-"\n"
-"border-left:0px;\n"
-"border-top:0px;\n"
-" border-right: 2px solid #a3a3a3;  /* 右边边框 */\n"
-"    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
-"margin-top: 0px;")
-        self.button_cameraB.setObjectName("button_cameraB")
-        self.horizontalLayout_3.addWidget(self.button_cameraB)
+
+        # 创建一个容器 widget 模拟按钮外观
+        button_container = QtWidgets.QWidget(self.widget_2)
+        button_container.setMinimumSize(QtCore.QSize(240, 30))  # 宽度与原按钮一致
+        button_container.setStyleSheet(
+        "background-color: #f4f4f4;\n"
+        "border-right: 2px solid #a3a3a3;\n"
+        "border-bottom: 2px solid #a3a3a3;"
+        )
+        container_layout = QtWidgets.QHBoxLayout(button_container)
+        container_layout.setContentsMargins(5, 0, 5, 0)  # 内边距模拟 padding
+        container_layout.setSpacing(5)
+
+        # 添加 7 个 LED 到容器
+        led_size = 20
+        for i in range(3, 10):
+                led = QtWidgets.QLabel(button_container)
+                led.setFixedSize(led_size, led_size)
+                led.setStyleSheet("background-color: red;\n"
+                        "border-radius: 10px; \n"
+                        "border: 1px solid gray;\n"
+                        "margin-top: 0px;\n"
+                        "")
+                led.setText("")
+                setattr(self, f"output_led{i}", led)
+                container_layout.addWidget(led)
+
+        # 将容器添加到原布局
+        self.horizontalLayout_3.addWidget(button_container)
+
         self.verticalLayout_10.addWidget(self.widget_2)
         self.verticalLayout_9.addWidget(self.widget)
         self.verticalLayout_2.addWidget(self.SingleMachine)
@@ -1480,8 +1491,7 @@ class Ui_MainWindow(object):
         self.SingleMachine.setTitle(_translate("MainWindow", "总体控制"))
         self.button_connect.setText(_translate("MainWindow", "启动"))
         self.button_motor.setText(_translate("MainWindow", "开启电机"))
-        self.button_cameraA.setText(_translate("MainWindow", "开启A侧相机及六维力"))
-        self.button_cameraB.setText(_translate("MainWindow", "开启B侧相机及六维力"))
+        self.button_switch.setText(_translate("MainWindow", "开启/切换基座供电"))
         self.SingleMachine_2.setTitle(_translate("MainWindow", "单机调试"))
         self.button_start.setText(_translate("MainWindow", "启动"))
         self.button_forward.setText(_translate("MainWindow", "正转"))
@@ -1537,7 +1547,7 @@ class Ui_MainWindow(object):
         self.label_33.setText(_translate("MainWindow", "Tz"))
         self.groupBox_31.setTitle(_translate("MainWindow", "电机"))
         self.table.setSortingEnabled(False)
-        item = self.table.verticalHeaderItem(0)
+        item = self.table.verticalHeaderItem(7)
         item.setText(_translate("MainWindow", "关节电机1"))
         item = self.table.verticalHeaderItem(1)
         item.setText(_translate("MainWindow", "关节电机2"))
@@ -1551,7 +1561,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "关节电机6"))
         item = self.table.verticalHeaderItem(6)
         item.setText(_translate("MainWindow", "关节电机7"))
-        item = self.table.verticalHeaderItem(7)
+        item = self.table.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "手爪电机1"))
         item = self.table.verticalHeaderItem(8)
         item.setText(_translate("MainWindow", "手爪电机2"))
@@ -1560,7 +1570,7 @@ class Ui_MainWindow(object):
         item = self.table.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "电机转速"))
         item = self.table.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "移动距离"))
+        item.setText(_translate("MainWindow", "当前位置"))
         item = self.table.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "报警号"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
