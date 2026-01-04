@@ -36,8 +36,8 @@ class Control:
         self.release_clampB_flag = False
 
         # 双相机
-        self.cameraA_serial = "909512070942"
-        self.cameraB_serial = "840412061540"
+        self.cameraA_serial = "827312072322"
+        self.cameraB_serial = "909512070942"
 
         self.open_cameraA_flag = False
         self.open_cameraB_flag = False
@@ -147,17 +147,19 @@ class Control:
 
     def switch_base(self):
         if self.switch_on:
-            self.tc3.write_by_name(f"GVL.output3", True, pyads.PLCTYPE_BOOL)
-            self.tc3.write_by_name(f"GVL.output7", True, pyads.PLCTYPE_BOOL)
-            time.sleep(3)
-            self.tc3.write_by_name(f"GVL.output7", False, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"MAIN.output3", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"MAIN.output7", True, pyads.PLCTYPE_BOOL)
+            time.sleep(1)
+            self.tc3.write_by_name(f"MAIN.output7", False, pyads.PLCTYPE_BOOL)
             self.open_cameraA()
+            self.switch_on = False
         else:
-            self.tc3.write_by_name(f"GVL.output4", True, pyads.PLCTYPE_BOOL)
-            self.tc3.write_by_name(f"GVL.output8", True, pyads.PLCTYPE_BOOL)
-            time.sleep(3)
-            self.tc3.write_by_name(f"GVL.output8", False, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"MAIN.output4", True, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"MAIN.output8", True, pyads.PLCTYPE_BOOL)
+            time.sleep(1)
+            self.tc3.write_by_name(f"MAIN.output8", False, pyads.PLCTYPE_BOOL)
             self.open_cameraB()
+            self.switch_on = True
 
 
     def open_cameraA(self):
@@ -464,7 +466,6 @@ class Control:
             self.addLogs("电机复位")
             select_axis = self.box_motor.currentIndex()
         self.tc3.write_by_name(f"Single.reset_flag[{select_axis}]", True, pyads.PLCTYPE_BOOL)
-        self.set_button_style(self.button_reset, False)
 
     def open_zero(self):
         if self.open_zero_flag:
@@ -486,7 +487,6 @@ class Control:
             self.addLogs("电机回零")
             select_axis = self.box_motor.currentIndex()
         self.tc3.write_by_name(f"Single.home_flag[{select_axis}]", True, pyads.PLCTYPE_BOOL)
-        self.set_button_style(self.button_zero, False)
 
     def open_move(self):
         if self.open_move_flag:
@@ -542,7 +542,6 @@ class Control:
             margin-top: 0px;
             """)
             self.addLogs(f"电机以{speed_text}m/s速度移动至({position_text})")
-            self.set_button_style(self.button_move, False)
 
     # ------------------------分系统流程相关函数----------------------------
     def set_button_style(self, button, active):
@@ -854,7 +853,7 @@ class Control:
             self.tc3.add_variable(f"GVL.axis[{i + 1}].NcToPlc.ErrorCode", pyads.PLCTYPE_UDINT, self.value_changed)
         
         for i in range(3,10):
-            self.tc3.add_variable(f"GVL.output[{i}]", pyads.PLCTYPE_BOOL, self.value_changed)
+            self.tc3.add_variable(f"MAIN.output{i}", pyads.PLCTYPE_BOOL, self.value_changed)
 
         '''self.tc3.add_variable(f"crawl1.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
         self.tc3.add_variable(f"crawl1.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
@@ -903,17 +902,17 @@ class Control:
         elif types == "ReaTwinRZ":
             self.line_Rz.setText(str(round(value, 3)))'''
             
-        if types == "FX":
+        if types[:2] == "FX":
             self.line_Fx.setText(str(round(value, 3)))
-        elif types == "FY":
+        elif types[:2] == "FY":
             self.line_Fy.setText(str(round(value, 3)))
-        elif types == "FZ":
+        elif types[:2] == "FZ":
             self.line_Fz.setText(str(round(value, 3)))
-        elif types == "TX":
+        elif types[:2] == "TX":
             self.line_Tx.setText(str(round(value, 3)))
-        elif types == "TY":
+        elif types[:2] == "TY":
             self.line_Ty.setText(str(round(value, 3)))
-        elif types == "TZ":
+        elif types[:2] == "TZ":
             self.line_Tz.setText(str(round(value, 3)))
 
         '''elif types == "CangMen_State_Close":

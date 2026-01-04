@@ -45,13 +45,13 @@ class TwinCat3_ADSserver(QThread):
     reverse_joint43 = pyqtSignal(str,bool)'''
 
 
-    def __init__(self, ip="5.117.71.196.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
+    def __init__(self, ip="127.0.0.1.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
         '''
         type ip: str
         type amsNetIdTarget: pyads.PORT_xxx
-        5.108.90.221.1.1
-        5.117.71.196.1.1
-        127.0.0.1.1.1
+        5.108.90.221.1.1: 120
+        5.117.71.196.1.1: 5yuan
+        127.0.0.1.1.1: local
         '''
         super().__init__()
         self.ip = ip
@@ -120,6 +120,7 @@ class TwinCat3_ADSserver(QThread):
                         self.eeposry_signal.emit(name, value)
                     elif types == "ReaTwinRZ":
                         self.eeposrz_signal.emit(name, value)
+                        
                     elif types == "FX1" or types == "FX2":
                         self.fx_signal.emit(name, value)
                     elif types == "FY1" or types == "FY2":

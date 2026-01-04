@@ -219,29 +219,50 @@ class Ui_MainWindow(object):
 
         # 创建一个容器 widget 模拟按钮外观
         button_container = QtWidgets.QWidget(self.widget_2)
-        button_container.setMinimumSize(QtCore.QSize(240, 30))  # 宽度与原按钮一致
+        button_container.setMinimumSize(QtCore.QSize(240, 50))  # 高度需增加以容纳文字
         button_container.setStyleSheet(
         "background-color: #f4f4f4;\n"
         "border-right: 2px solid #a3a3a3;\n"
         "border-bottom: 2px solid #a3a3a3;"
         )
         container_layout = QtWidgets.QHBoxLayout(button_container)
-        container_layout.setContentsMargins(5, 0, 5, 0)  # 内边距模拟 padding
-        container_layout.setSpacing(5)
+        container_layout.setContentsMargins(0, 0, 0, 0)  # 上下留点空间
+        container_layout.setSpacing(0)  # LED 之间的间距
 
-        # 添加 7 个 LED 到容器
         led_size = 20
+
+        # 添加 7 个 LED（编号 3 到 9）
         for i in range(3, 10):
-                led = QtWidgets.QLabel(button_container)
+                # 为每个 LED + 文字创建一个垂直容器
+                led_widget = QtWidgets.QWidget(button_container)
+                led_layout = QtWidgets.QVBoxLayout(led_widget)
+                led_layout.setContentsMargins(0, 5, 0, 0)
+                led_layout.setSpacing(0)
+                # LED 指示灯
+                led = QtWidgets.QLabel(led_widget)
                 led.setFixedSize(led_size, led_size)
-                led.setStyleSheet("background-color: red;\n"
-                        "border-radius: 10px; \n"
-                        "border: 1px solid gray;\n"
-                        "margin-top: 0px;\n"
-                        "")
+                led.setStyleSheet("""
+                        background-color: red;
+                        border-radius: 10px; 
+                        border: 1px solid gray;
+                        margin-top: 0px;
+                """)
                 led.setText("")
+
+                # 文字标签
+                label = QtWidgets.QLabel(str(i), led_widget)
+                label.setAlignment(QtCore.Qt.AlignCenter)
+                label.setStyleSheet("font-size: 15px; color: black; padding-bottom: 5px;")  # 可调整字体
+
+                # 添加到垂直布局
+                led_layout.addWidget(led, alignment=QtCore.Qt.AlignCenter)
+                led_layout.addWidget(label, alignment=QtCore.Qt.AlignCenter)
+
+                # 绑定到 self.output_led3 ~ self.output_led9
                 setattr(self, f"output_led{i}", led)
-                container_layout.addWidget(led)
+
+                # 将整个小部件加入主水平布局
+                container_layout.addWidget(led_widget)
 
         # 将容器添加到原布局
         self.horizontalLayout_3.addWidget(button_container)
