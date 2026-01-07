@@ -7,7 +7,7 @@ from control import Control
 import faulthandler
 from functools import partial
 faulthandler.enable()
- 
+
 class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
     def __init__(self,parent =None):
         super(MyMainWindow,self).__init__(parent)

@@ -85,6 +85,7 @@ class Control:
                 self.connect_flag = True
                 self.button_connect.setText("关闭")
                 self.addLogs("Twincat连接开启")
+                self.addLogs("目前暂时没有基座供电")
                 self.tc3.connect()
                 self.add_adsvars()
                 self.tc3.moving_signal.connect(self.value_changed)
@@ -153,6 +154,7 @@ class Control:
             self.tc3.write_by_name(f"MAIN.output7", False, pyads.PLCTYPE_BOOL)
             self.open_cameraA()
             self.switch_on = False
+            self.addLogs("开启A侧供电")
         else:
             self.tc3.write_by_name(f"MAIN.output4", True, pyads.PLCTYPE_BOOL)
             self.tc3.write_by_name(f"MAIN.output8", True, pyads.PLCTYPE_BOOL)
@@ -160,6 +162,7 @@ class Control:
             self.tc3.write_by_name(f"MAIN.output8", False, pyads.PLCTYPE_BOOL)
             self.open_cameraB()
             self.switch_on = True
+            self.addLogs("开启B侧供电")
 
 
     def open_cameraA(self):

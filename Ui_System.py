@@ -195,6 +195,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.button_motor)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
+
         self.button_switch = QtWidgets.QPushButton(self.widget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -214,6 +215,7 @@ class Ui_MainWindow(object):
 "margin-top: 0px;")
         self.button_switch.setObjectName("button_switch")
         self.horizontalLayout_3.addWidget(self.button_switch)
+
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
 
