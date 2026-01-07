@@ -3,6 +3,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from ads import TwinCat3_ADSserver
 import pyads
 import re
+from PyQt5.QtWidgets import QMessageBox  # PyQt5
 from video import VideoThread
 from Servo import VisualServoThread
 from Forward_planner import Forward_planner
@@ -147,7 +148,11 @@ class Control:
 
 
     def switch_base(self):
-        if self.switch_on:
+        select_AB = int(self.check_switch.currentIndex())
+        if select_AB == 0 and self.open_cameraA_flag:
+            self.addLogs("A侧供电已开启,请勿重复开启")
+            pass
+        elif select_AB == 0 and not self.open_cameraA_flag:
             self.tc3.write_by_name(f"MAIN.output3", True, pyads.PLCTYPE_BOOL)
             self.tc3.write_by_name(f"MAIN.output7", True, pyads.PLCTYPE_BOOL)
             time.sleep(1)
@@ -155,7 +160,11 @@ class Control:
             self.open_cameraA()
             self.switch_on = False
             self.addLogs("开启A侧供电")
-        else:
+
+        if select_AB == 1 and self.open_cameraB_flag:
+            self.addLogs("B侧供电已开启,请勿重复开启")
+            pass
+        elif select_AB == 1 and not self.open_cameraB_flag:
             self.tc3.write_by_name(f"MAIN.output4", True, pyads.PLCTYPE_BOOL)
             self.tc3.write_by_name(f"MAIN.output8", True, pyads.PLCTYPE_BOOL)
             time.sleep(1)

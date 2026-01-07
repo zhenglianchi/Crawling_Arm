@@ -193,30 +193,50 @@ class Ui_MainWindow(object):
 "margin-top: 0px;")
         self.button_motor.setObjectName("button_motor")
         self.horizontalLayout_3.addWidget(self.button_motor)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
 
-        self.button_switch = QtWidgets.QPushButton(self.widget_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.button_switch.sizePolicy().hasHeightForWidth())
-        self.button_switch.setSizePolicy(sizePolicy)
-        self.button_switch.setMinimumSize(QtCore.QSize(240, 0))
-        self.button_switch.setStyleSheet("background-color: #f4f4f4;\n"
-"color: black;\n"
-"   \n"
-"padding: 5px 10px;\n"
-"\n"
-"border-left:0px;\n"
-"border-top:0px;\n"
-" border-right: 2px solid #a3a3a3;  /* 右边边框 */\n"
-"    border-bottom: 2px solid #a3a3a3; /* 下边边框 */\n"
-"margin-top: 0px;")
-        self.button_switch.setObjectName("button_switch")
-        self.horizontalLayout_3.addWidget(self.button_switch)
+        # 创建一个水平容器，模拟原按钮的外观（宽度240，带边框）
+        switch_container = QtWidgets.QWidget(self.widget_2)
+        switch_container.setMinimumSize(QtCore.QSize(270, 50))
+        switch_container.setStyleSheet(
+        "background-color: #f4f4f4;\n"
+        "border-right: 0px solid #a3a3a3;\n"
+        "border-bottom: 0px solid #a3a3a3;"
+        )
 
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        # 容器内的水平布局
+        inner_layout = QtWidgets.QHBoxLayout(switch_container)
+        inner_layout.setContentsMargins(5, 0, 5, 0)  # 模拟原 padding
+        inner_layout.setSpacing(8)
+
+        # 1. 下拉框：供电选择
+        self.check_switch = QtWidgets.QComboBox(switch_container)
+        self.check_switch.addItems(["A侧供电", "B侧供电"])
+        self.check_switch.setStyleSheet(
+        "QComboBox { padding: 4px; background: white; border: 1px solid #ccc; }"
+        "QComboBox::drop-down { width: 20px; }"
+        )
+
+        # 2. 按钮：开启/切换（保留原变量名）
+        self.button_switch = QtWidgets.QPushButton("开启/切换", switch_container)
+        self.button_switch.setStyleSheet(
+        "QPushButton {"
+        "   background-color: #e0e0e0;"
+        "   border: 1px solid #a3a3a3;"
+        "   padding: 4px 8px;"
+        "}"
+        "QPushButton:hover { background-color: #d0d0d0; }"
+        )
+
+        # 添加到内部布局
+        inner_layout.addWidget(self.check_switch)
+        inner_layout.addWidget(self.button_switch)
+
+        # 将整个组合添加到原布局（替换原来的 button_switch）
+        self.horizontalLayout_3.addWidget(switch_container)
+
+        spacerItem2 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
 
         # 创建一个容器 widget 模拟按钮外观
@@ -1514,7 +1534,7 @@ class Ui_MainWindow(object):
         self.SingleMachine.setTitle(_translate("MainWindow", "总体控制"))
         self.button_connect.setText(_translate("MainWindow", "启动"))
         self.button_motor.setText(_translate("MainWindow", "开启电机"))
-        self.button_switch.setText(_translate("MainWindow", "开启/切换基座供电"))
+        self.button_switch.setText(_translate("MainWindow", "开启/切换"))
         self.SingleMachine_2.setTitle(_translate("MainWindow", "单机调试"))
         self.button_start.setText(_translate("MainWindow", "启动"))
         self.button_forward.setText(_translate("MainWindow", "正转"))
