@@ -9,6 +9,7 @@ from Servo import VisualServoThread
 from Forward_planner import Forward_planner
 import numpy as np
 import time
+from ForceRecordThread import ForceRecordThread
 
 
 class Control:
@@ -48,6 +49,7 @@ class Control:
         self.thread = None
         # 初始化连接
         self.tc3 = TwinCat3_ADSserver()
+        self.force_record_thread = ForceRecordThread(self.tc3, parent=self)
 
     # ---------------------总体控制相关函数-------------------------
     def open_connect(self):
@@ -160,6 +162,8 @@ class Control:
             self.open_cameraA()
             self.switch_on = False
             self.addLogs("开启A侧供电")
+            self.stop_force_record()
+            self.start_force_record()
 
         if select_AB == 1 and self.open_cameraB_flag:
             self.addLogs("B侧供电已开启,请勿重复开启")
@@ -172,13 +176,15 @@ class Control:
             self.open_cameraB()
             self.switch_on = True
             self.addLogs("开启B侧供电")
+            self.stop_force_record()
+            self.start_force_record()
 
 
     def open_cameraA(self):
         if self.open_cameraA_flag:
             self.open_cameraA_flag = False
             if self.thread:
-                self.thread.stop_camera()
+                #self.thread.stop_camera()
                 self.thread = None
             self.del_force1()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
@@ -193,7 +199,7 @@ class Control:
 
                 self.thread = VideoThread(serial=self.cameraA_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
-                self.thread.start_camera()
+                #self.thread.start_camera()
                 self.add_force1()
             except Exception as e:
                 self.addLogs(str(e))
@@ -203,7 +209,7 @@ class Control:
         if self.open_cameraB_flag:
             self.open_cameraB_flag = False
             if self.thread:
-                self.thread.stop_camera()
+                #self.thread.stop_camera()
                 self.thread = None
             self.del_force2()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
@@ -218,7 +224,7 @@ class Control:
 
                 self.thread = VideoThread(serial=self.cameraB_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
-                self.thread.start_camera()
+                #self.thread.start_camera()
                 self.add_force2()
             except Exception as e:
                 self.addLogs(str(e))
@@ -1023,3 +1029,17 @@ class Control:
         self.tc3.remove_variable("MAIN.TX2")
         self.tc3.remove_variable("MAIN.TY2")
         self.tc3.remove_variable("MAIN.TZ2")
+
+
+    # 开启力数据记录
+    def start_force_record(self):
+        if not self.force_record_thread.is_running:
+            self.force_record_thread = ForceRecordThread(self.tc3, parent=self) # 重新实例化
+            self.force_record_thread.start()
+            self.addLogs(f"开始记录力传感器数据，采样间隔：{self.force_record_thread.record_interval}s")
+
+    # 关闭力数据记录
+    def stop_force_record(self):
+        if self.force_record_thread.is_running:
+            self.force_record_thread.stop_record()
+            self.addLogs(f"力传感器数据记录结束，文件已保存为：{self.force_record_thread.file_path}")

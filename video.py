@@ -13,7 +13,7 @@ class VideoThread(QThread):
     def __init__(self,serial=None):
         super().__init__()
         self.serial=serial
-        self.camera = Camera(serial=self.serial)
+        #self.camera = Camera(serial=self.serial)
         self._run_flag = True
         self.uv = None
         self.p_star = None
