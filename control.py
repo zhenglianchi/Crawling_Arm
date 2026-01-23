@@ -184,7 +184,7 @@ class Control:
         if self.open_cameraA_flag:
             self.open_cameraA_flag = False
             if self.thread:
-                #self.thread.stop_camera()
+                self.thread.stop_camera()
                 self.thread = None
             self.del_force1()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
@@ -199,7 +199,7 @@ class Control:
 
                 self.thread = VideoThread(serial=self.cameraA_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
-                #self.thread.start_camera()
+                self.thread.start_camera()
                 self.add_force1()
             except Exception as e:
                 self.addLogs(str(e))
@@ -209,7 +209,7 @@ class Control:
         if self.open_cameraB_flag:
             self.open_cameraB_flag = False
             if self.thread:
-                #self.thread.stop_camera()
+                self.thread.stop_camera()
                 self.thread = None
             self.del_force2()
             self.VisionPictureRGB_2.setPixmap(QPixmap(""))
@@ -224,7 +224,7 @@ class Control:
 
                 self.thread = VideoThread(serial=self.cameraB_serial)
                 self.thread.change_pixmap_signal.connect(self.update_image)
-                #self.thread.start_camera()
+                self.thread.start_camera()
                 self.add_force2()
             except Exception as e:
                 self.addLogs(str(e))
