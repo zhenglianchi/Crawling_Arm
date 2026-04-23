@@ -155,10 +155,10 @@ class Control:
             self.addLogs("A侧供电已开启,请勿重复开启")
             pass
         elif select_AB == 0 and not self.open_cameraA_flag:
-            self.tc3.write_by_name(f"MAIN.output3", True, pyads.PLCTYPE_BOOL)
-            self.tc3.write_by_name(f"MAIN.output7", True, pyads.PLCTYPE_BOOL)
-            time.sleep(1)
-            self.tc3.write_by_name(f"MAIN.output7", False, pyads.PLCTYPE_BOOL)
+            #self.tc3.write_by_name(f"MAIN.output3", True, pyads.PLCTYPE_BOOL)
+            #self.tc3.write_by_name(f"MAIN.output7", True, pyads.PLCTYPE_BOOL)
+            #time.sleep(1)
+            #self.tc3.write_by_name(f"MAIN.output7", False, pyads.PLCTYPE_BOOL)
             self.open_cameraA()
             self.switch_on = False
             self.addLogs("开启A侧供电")
@@ -169,10 +169,10 @@ class Control:
             self.addLogs("B侧供电已开启,请勿重复开启")
             pass
         elif select_AB == 1 and not self.open_cameraB_flag:
-            self.tc3.write_by_name(f"MAIN.output4", True, pyads.PLCTYPE_BOOL)
-            self.tc3.write_by_name(f"MAIN.output8", True, pyads.PLCTYPE_BOOL)
-            time.sleep(1)
-            self.tc3.write_by_name(f"MAIN.output8", False, pyads.PLCTYPE_BOOL)
+            #self.tc3.write_by_name(f"MAIN.output4", True, pyads.PLCTYPE_BOOL)
+            #self.tc3.write_by_name(f"MAIN.output8", True, pyads.PLCTYPE_BOOL)
+            #time.sleep(1)
+            #self.tc3.write_by_name(f"MAIN.output8", False, pyads.PLCTYPE_BOOL)
             self.open_cameraB()
             self.switch_on = True
             self.addLogs("开启B侧供电")
@@ -296,6 +296,7 @@ class Control:
             select_axis = int(self.box_motor.currentIndex())
             self.tc3.write_by_name(f"Single.nSelect", select_axis, pyads.PLCTYPE_INT)
             self.tc3.write_by_name(f"Single.Enable_Open[{select_axis}]", False, pyads.PLCTYPE_BOOL)
+            self.tc3.write_by_name(f"Single.Single_Open", False, pyads.PLCTYPE_BOOL)
         else:
             try:
                 # 检查是否选择了电机
@@ -307,6 +308,7 @@ class Control:
                 self.box_motor.setEnabled(False)
                 self.button_start.setText("关闭")
                 self.addLogs(f"{select_axis}单机调试启动")
+                self.tc3.write_by_name(f"Single.Single_Open", True, pyads.PLCTYPE_BOOL)
                 self.tc3.write_by_name(f"Single.nSelect", select_axis, pyads.PLCTYPE_INT)
                 self.tc3.write_by_name(f"Single.Enable_Open[{select_axis}]", True, pyads.PLCTYPE_BOOL)
                 self.start_led.setStyleSheet("""

@@ -45,7 +45,7 @@ class TwinCat3_ADSserver(QThread):
     reverse_joint43 = pyqtSignal(str,bool)'''
 
 
-    def __init__(self, ip="127.0.0.1.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
+    def __init__(self, ip="5.117.71.196.1.1", amsNetIdTarget=pyads.PORT_TC3PLC1):
         '''
         type ip: str
         type amsNetIdTarget: pyads.PORT_xxx
