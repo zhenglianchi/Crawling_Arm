@@ -83,6 +83,10 @@ class MyMainWindow(QMainWindow,Ui_MainWindow): #这里也要记得改
 
         self.mounting4.clicked.connect(self.control.mounting)
         self.button_linear_plan4.clicked.connect(partial(self.control.linear_plan,4))
+        
+        # 保存按钮绑定
+        self.button_start_save.clicked.connect(self.control.start_save)
+        self.button_stop_save.clicked.connect(self.control.stop_save)
 
     # 日志显示
     def addLogs(self, *args, split=''):

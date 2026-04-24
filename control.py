@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
-from ads import TwinCat3_ADSserver
-import pyads
+#from ads import TwinCat3_ADSserver
+#import pyads
 import re
 from PyQt5.QtWidgets import QMessageBox  # PyQt5
 from video import VideoThread
@@ -9,7 +9,9 @@ from Servo import VisualServoThread
 from Forward_planner import Forward_planner
 import numpy as np
 import time
-from ForceRecordThread import ForceRecordThread
+import threading
+#from ForceRecordThread import ForceRecordThread
+#from PoseRecordThread import PoseRecordThread
 
 
 class Control:
@@ -48,8 +50,9 @@ class Control:
 
         self.thread = None
         # 初始化连接
-        self.tc3 = TwinCat3_ADSserver()
-        self.force_record_thread = ForceRecordThread(self.tc3, parent=self)
+        #self.tc3 = TwinCat3_ADSserver()
+        #self.force_record_thread = ForceRecordThread(self.tc3, parent=self)
+        #self.pose_record_thread = PoseRecordThread(self.tc3, parent=self)
 
     # ---------------------总体控制相关函数-------------------------
     def open_connect(self):
@@ -162,8 +165,6 @@ class Control:
             self.open_cameraA()
             self.switch_on = False
             self.addLogs("开启A侧供电")
-            self.stop_force_record()
-            self.start_force_record()
 
         if select_AB == 1 and self.open_cameraB_flag:
             self.addLogs("B侧供电已开启,请勿重复开启")
@@ -176,8 +177,6 @@ class Control:
             self.open_cameraB()
             self.switch_on = True
             self.addLogs("开启B侧供电")
-            self.stop_force_record()
-            self.start_force_record()
 
 
     def open_cameraA(self):
@@ -855,6 +854,51 @@ class Control:
         print("装配")
         self.set_button_style(self.mounting4, True)
         self.set_led_style(self.led31, True)
+
+    # ---------------------保存数据相关函数------------------------
+    def start_save(self):
+        """开始保存力矩和末端位姿数据"""
+        try:
+            # 启动力数据记录线程
+            if not self.force_record_thread.is_running:
+                self.force_record_thread.start()
+                self.addLogs("力数据记录已开始")
+            
+            # 启动位姿数据记录线程
+            if not self.pose_record_thread.is_running:
+                self.pose_record_thread.start()
+                self.addLogs("末端位姿数据记录已开始")
+            
+            self.addLogs("保存数据线程已启动")
+        except Exception as e:
+            self.addLogs(f"启动保存线程失败: {str(e)}")
+
+    def stop_save(self):
+        """结束保存力矩和末端位姿数据（2秒后）"""
+        try:
+            self.addLogs("将在2秒后结束保存线程")
+            
+            # 2秒后停止线程
+            def stop_after_delay():
+                time.sleep(2)
+                # 停止力数据记录线程
+                if self.force_record_thread.is_running:
+                    self.force_record_thread.stop_record()
+                    self.addLogs("力数据记录已结束")
+                
+                # 停止位姿数据记录线程
+                if self.pose_record_thread.is_running:
+                    self.pose_record_thread.stop_record()
+                    self.addLogs("末端位姿数据记录已结束")
+                
+                self.addLogs("保存数据线程已结束")
+            
+            # 创建一个新线程来执行延迟停止操作
+            stop_thread = threading.Thread(target=stop_after_delay)
+            stop_thread.daemon = True
+            stop_thread.start()
+        except Exception as e:
+            self.addLogs(f"停止保存线程失败: {str(e)}")
 
     # 日志显示相关
     def addLogs(self, *args, split=''):
