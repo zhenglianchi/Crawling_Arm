@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
-#from ads import TwinCat3_ADSserver
-#import pyads
+from ads import TwinCat3_ADSserver
+import pyads
 import re
 from PyQt5.QtWidgets import QMessageBox  # PyQt5
 from video import VideoThread
@@ -10,8 +10,8 @@ from Forward_planner import Forward_planner
 import numpy as np
 import time
 import threading
-#from ForceRecordThread import ForceRecordThread
-#from PoseRecordThread import PoseRecordThread
+from ForceRecordThread import ForceRecordThread
+from PoseRecordThread import PoseRecordThread
 
 
 class Control:
@@ -39,9 +39,10 @@ class Control:
         self.reverse_joint4_flag = False
         self.release_clampB_flag = False
 
-        # 双相机
-        self.cameraA_serial = "827312072322"
-        self.cameraB_serial = "909512070942"
+        # 低位置
+        self.cameraA_serial = "909512070942"
+        # 高位置
+        self.cameraB_serial = "840412061540"
 
         self.open_cameraA_flag = False
         self.open_cameraB_flag = False
@@ -50,9 +51,9 @@ class Control:
 
         self.thread = None
         # 初始化连接
-        #self.tc3 = TwinCat3_ADSserver()
-        #self.force_record_thread = ForceRecordThread(self.tc3, parent=self)
-        #self.pose_record_thread = PoseRecordThread(self.tc3, parent=self)
+        self.tc3 = TwinCat3_ADSserver()
+        self.force_record_thread = ForceRecordThread(self.tc3, parent=self)
+        self.pose_record_thread = PoseRecordThread(self.tc3, parent=self)
 
     # ---------------------总体控制相关函数-------------------------
     def open_connect(self):
@@ -919,12 +920,12 @@ class Control:
         for i in range(3,10):
             self.tc3.add_variable(f"MAIN.output{i}", pyads.PLCTYPE_BOOL, self.value_changed)
 
-        '''self.tc3.add_variable(f"crawl1.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
-        self.tc3.add_variable(f"crawl1.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)'''
+        self.tc3.add_variable(f"GVL.ReaTwinX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"GVL.ReaTwinY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"GVL.ReaTwinZ", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"GVL.ReaTwinRX", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"GVL.ReaTwinRY", pyads.PLCTYPE_LREAL, self.value_changed)
+        self.tc3.add_variable(f"GVL.ReaTwinRZ", pyads.PLCTYPE_LREAL, self.value_changed)
         
         # 这里连接是否完成的变量
         #self.tc3.add_variable(f"GVL.CangMen_State_Close", pyads.PLCTYPE_BOOL, self.value_changed)
@@ -934,8 +935,9 @@ class Control:
     def value_changed(self, name, value):
         pattern = r'\d+'
         types = name.split(".")[-1]
-
-        row = int(re.findall(pattern, name)[0])
+        pat = re.findall(pattern, name)
+        if len(pat)>0:
+            row = int(pat[0])
         if types == "Moving":
             if float(self.table.item(row - 1, 2).text()) == 0:
                 astr = "停止状态"
@@ -953,7 +955,7 @@ class Control:
             item_data = QtWidgets.QTableWidgetItem(str(value))
             self.table.setItem(row - 1, 4, item_data)
 
-        '''if types == "ReaTwinX":
+        if types == "ReaTwinX":
             self.line_x.setText(str(round(value, 3)))
         elif types == "ReaTwinY":
             self.line_y.setText(str(round(value, 3)))
@@ -964,7 +966,7 @@ class Control:
         elif types == "ReaTwinRY":
             self.line_Ry.setText(str(round(value, 3)))
         elif types == "ReaTwinRZ":
-            self.line_Rz.setText(str(round(value, 3)))'''
+            self.line_Rz.setText(str(round(value, 3)))
             
         if types[:2] == "FX":
             self.line_Fx.setText(str(round(value, 3)))
@@ -1025,12 +1027,12 @@ class Control:
         self.VisionPictureRGB_2.setPixmap(QPixmap.fromImage(convert_to_qt_format))
 
     def write_delta(self, delta_world):
-        self.tc3.write_by_name(f"crawl1.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"crawl1.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"crawl1.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"crawl1.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"crawl1.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
-        self.tc3.write_by_name(f"crawl1.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonX", delta_world[0], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonY", delta_world[1], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonZ", delta_world[2], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonRx", delta_world[3], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonRy", delta_world[4], pyads.PLCTYPE_LREAL)
+        self.tc3.write_by_name(f"GVL.RepythonRz", delta_world[5], pyads.PLCTYPE_LREAL)
 
     def servo_judge(self, finished_flag=False):
         if finished_flag:

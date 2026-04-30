@@ -70,6 +70,19 @@ def servo(pose,uv,Z,p_star,lambda_gain,K):
 
     v = -lambda_gain @ np.linalg.pinv(J) @ e
 
+    print("相机系",v)
+
+    x,y,z = v[0], v[1], v[2]
+    #v[0] = -y
+    v[0] = 0
+    v[1] = 0.01
+    v[2] = 0
+    v[3] = 0
+    v[4] = 0
+    v[5] = 0
+
+    print("末端系",v)
+
     # 重新计算位姿增量 Td
     Td = SE3.Delta(v)
 
@@ -87,8 +100,11 @@ def servo(pose,uv,Z,p_star,lambda_gain,K):
     # 提取平移部分
     translation = T_world_d.t
     rot = R.from_matrix(T_world_d.R).as_euler("xyz")
+    rot = [0,0,0]
 
     delta_speed = np.hstack((translation, rot)).reshape(1, 6).squeeze()
+
+    #print("世界",delta_speed)
 
     return v,delta_speed,error_rms
 
@@ -116,6 +132,7 @@ class VisualServoThread(QThread):
                 curr_pose = [x,y,z,rx,ry,rz]
                 cam_delta, world_delta, error_rms = servo(curr_pose, uv, Z, p_star, self.lambda_gain, self.video_thread.camera.K)
                 self.update_pose_signal.emit(world_delta.tolist())
+
                 if error_rms < 1:
                     self.finished_signal.emit(True)
                     break

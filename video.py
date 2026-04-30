@@ -13,7 +13,7 @@ class VideoThread(QThread):
     def __init__(self,serial=None):
         super().__init__()
         self.serial=serial
-        #self.camera = Camera(serial=self.serial)
+        self.camera = Camera(serial=self.serial)
         self._run_flag = True
         self.uv = None
         self.p_star = None
@@ -35,17 +35,28 @@ class VideoThread(QThread):
                 parameters = aruco.DetectorParameters_create()
                 # 输入rgb图, aruco的dictionary, 相机内参, 相机的畸变参数
                 corners, ids, rejected_img_points = aruco.detectMarkers(img_color, aruco_dict, parameters=parameters,cameraMatrix=intr_matrix, distCoeff=intr_coeffs)
-                
+                #print(ids)
                 if corners:
                     aruco.drawDetectedMarkers(img_color, corners)
                     detected_points = corners[0][0]
+
+                    #print("detecd:",detected_points)
 
                     average_x = (detected_points[0][0] + detected_points[1][0] + detected_points[2][0] + detected_points[3][0]) / 4
                     average_y = (detected_points[0][1] + detected_points[1][1] + detected_points[2][1] + detected_points[3][1]) / 4
                     # 得到中心点坐标
                     center_point = (average_x, average_y)
 
-                    target_points = self.resize_and_center_box(detected_points,resolution)
+                    #target_points = self.resize_and_center_box(detected_points,resolution)
+                    target_points1 =[[306, 231],
+                                    [479, 229],
+                                    [481, 404],
+                                    [306, 404]]
+                    
+                    target_points =[[305, 233],
+                                    [477, 232],
+                                    [479, 405],
+                                    [306, 408]]
 
                     for point in target_points:
                         cv2.circle(img_color, point, 3, (255, 255, 255), -1)
